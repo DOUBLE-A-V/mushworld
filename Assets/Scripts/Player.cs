@@ -18,7 +18,10 @@ public class Player : MonoBehaviour
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     void Start()
     {
+        new Item("null");
         Inventory.addItem("ultratest");
+        Inventory.printInventory();
+        Inventory.removeItem("ultratest");
         Inventory.printInventory();
     }
 

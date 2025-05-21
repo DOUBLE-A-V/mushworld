@@ -5,11 +5,12 @@ namespace InvManager
 {
     public class Item
     {
+        // all items presets
         static private Dictionary<string, List<string>> itemsStringDataPresets =  new Dictionary<string, List<string>>();
         static private Dictionary<string, List<float>> itemsFloatDataPresets =  new Dictionary<string, List<float>>();
         static private Dictionary<string, Vector2> itemsSizeDataPresets =  new Dictionary<string, Vector2>()
         {
-            { "ultratest", new Vector2(3, 3) }
+            { "ultratest", new Vector2(4, 4) }
         };
         
         static private uint idCounter = 0;
@@ -22,7 +23,43 @@ namespace InvManager
         public Vector2 position = new Vector2(-1, -1);
         public List<string> stringData = new List<string>();
         public List<float> floatData = new List<float>();
+        public uint realItemId = 0;
 
+        public static Item getItem(string itemName)
+        {
+            foreach (Item item in allItems)
+            {
+                if (item.name == itemName)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+        public static Item getItem(uint id)
+        {
+            foreach (Item item in allItems)
+            {
+                if (item.id == id)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        public static void deleteItem(uint id)
+        {
+            foreach (Item item in allItems)
+            {
+                if (item.id == id)
+                {
+                    allItems.Remove(item);
+                }
+            }
+        }
         public Item(Item item)
         {
             this.id = item.id;
@@ -58,6 +95,12 @@ namespace InvManager
         {
             allItems.Remove(this);
         }
+
+        public void delete()
+        {
+            allItems.Remove(this);
+        }
+        
         public Item(string itemName)
         {
             idCounter++;
@@ -204,6 +247,12 @@ namespace InvManager
 
         public Item getCell(Vector2 position)
         {
+            if (position.x > cells[0].Count - 1 || position.y > cells[0].Count - 1)
+            {
+                return Item.getItem("null");
+            }
+            return cells[(int)position.y][(int)position.x];
+            /*
             Vector2 countPos = new Vector2(0, 0);
             foreach (List<Item> line in cells)
             {
@@ -219,8 +268,66 @@ namespace InvManager
                 countPos.y++;
             }
             return null;
+            */
         }
 
+        public Item removeItem(uint id)
+        {
+            Item itemSave = Item.getItem(id);
+
+            if (itemSave != null)
+            {
+                foreach (Item i in items)
+                {
+                    if (i.id == id)
+                    {
+                        items.Remove(i);
+                        break;
+                    }
+                }
+            
+                Vector2 countPos = new Vector2(0, 0);
+                List<Vector2> posesRemoving = new List<Vector2>();
+                foreach (List<Item> line in cells)
+                {
+                    countPos.x = 0;
+                    foreach (Item item in line)
+                    {
+                        if (item != null)
+                        {
+                            if (item.realItemId == id)
+                            {
+                                posesRemoving.Add(countPos);
+                                if (item.itemPartId != 0)
+                                {
+                                    item.delete();
+                                }
+                            }
+                        }
+                        countPos.x++;
+                    }
+                    countPos.y++;
+                }
+
+                foreach (Vector2 pos in posesRemoving)
+                {
+                    setCell(null, pos);
+                }
+            }
+            return itemSave;
+        }
+
+        public Item removeItem(string itemName)
+        {
+            foreach (Item i in items)
+            {
+                if (i.name == itemName)
+                {
+                    return removeItem(i.id);
+                }
+            }
+            return null;
+        }
         public bool checkSuitable(Item item, Vector2 position)
         {
             for (int i = 0; i < item.size.y; i++)
@@ -239,8 +346,36 @@ namespace InvManager
 
         public void setCell(Item item, Vector2 position)
         {
-            Debug.Log(position);
             cells[(int)position.y][(int)position.x] = item;
+        }
+
+        public bool hasItem(string itemName)
+        {
+            foreach (Item i in items)
+            {
+                if (i.name == itemName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool hasItem(uint id)
+        {
+            foreach (Item i in items)
+            {
+                if (i.id == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Item getRealItem(Item item)
+        {
+            return Item.getItem(item.realItemId);
         }
         public bool addItem(Item item)
         {
@@ -277,12 +412,19 @@ namespace InvManager
                     {
                         Item itemBase = new Item(item.name);
                         itemBase.itemPartId = (int)(j + i * item.size.x);
+                        itemBase.realItemId = item.id;
+                        if (itemBase.itemPartId == 0)
+                        {
+                            itemBase.id = item.id;
+                            items.Add(itemBase);
+                        }
                         setCell(itemBase, nowPos);
                         nowPos.x++;
                     }
                     nowPos.y++;
                 }
             }
+            item.delete();
             return false;
         }
     }
