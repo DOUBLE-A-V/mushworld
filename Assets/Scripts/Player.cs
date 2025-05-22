@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     {
         new Item("null");
         Inventory.addItem("ultratest");
+        Inventory.addItem("daun");
         Inventory.printInventory();
         Inventory.removeItem("ultratest");
         Inventory.printInventory();
@@ -101,7 +102,7 @@ public class Player : MonoBehaviour
     {
         if ((movingSpeed.x > 0 && rb.velocity.x < movingSpeed.x) || (movingSpeed.x < 0 && rb.velocity.x > movingSpeed.x))
         {
-            rb.AddForce(movingSpeed);
+            rb.velocity = new Vector2(movingSpeed.x, rb.velocity.y);
         } else if (movingSpeed.x == 0)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);

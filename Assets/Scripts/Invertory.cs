@@ -10,7 +10,8 @@ namespace InvManager
         static private Dictionary<string, List<float>> itemsFloatDataPresets =  new Dictionary<string, List<float>>();
         static private Dictionary<string, Vector2> itemsSizeDataPresets =  new Dictionary<string, Vector2>()
         {
-            { "ultratest", new Vector2(4, 4) }
+            { "ultratest", new Vector2(2, 2) },
+            { "daun", new Vector2(3, 1) }
         };
         
         static private uint idCounter = 0;
@@ -313,6 +314,11 @@ namespace InvManager
                 {
                     setCell(null, pos);
                 }
+            }
+
+            if (itemSave != null)
+            {
+                itemSave.realItemId = 0;
             }
             return itemSave;
         }
