@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public Vector2 movingSpeed;
     public bool controlsLocked = false;
     private bool isGrounded = false;
+    private bool right = true;
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     void Start()
     {
@@ -32,6 +33,47 @@ public class Player : MonoBehaviour
         if (hit.collider != false && hit.distance < 0.05f)
         {
             rb.AddForce(new Vector2(0, jumpForce));
+        }
+        else
+        {
+            if (right)
+            {
+                hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0.5f, 0), Vector2.right, 0.05f);
+                if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f, 0), Vector2.right, 0.05f))
+                {
+                    float addY = 0.1f;
+                    while (true)
+                    {
+                        hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f + addY, 0), Vector2.right, 0.05f);
+                        if (!hit.collider)
+                        {
+                            rb.velocity = Vector2.zero;
+                            transform.position += new Vector3(0.5f, addY, 0);
+                            break;
+                        }
+                        addY += 0.05f;
+                    }
+                }
+            }
+            else
+            {
+                hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0.5f, 0), Vector2.left, 0.05f);
+                if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f, 0), Vector2.left, 0.05f))
+                {
+                    float addY = 0.1f;
+                    while (true)
+                    {
+                        hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f + addY, 0), Vector2.left, 0.05f);
+                        if (!hit.collider)
+                        {
+                            rb.velocity = Vector2.zero;
+                            transform.position -= new Vector3(0.5f, addY * -1, 0);
+                            break;
+                        }
+                        addY += 0.05f;
+                    }
+                }
+            }
         }
     }
 
@@ -68,9 +110,11 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             movingSpeed.x = speed * -1;
+            right = false;
         } else if (Input.GetKey(KeyCode.D))
         {
             movingSpeed.x = speed;
+            right = true;
         }
         else
         {
@@ -80,10 +124,10 @@ public class Player : MonoBehaviour
         RaycastHit2D hit = new RaycastHit2D();
         if (Input.GetKey(KeyCode.A))
         {
-            hit = Physics2D.Raycast(transform.position + new Vector3(-0.5f, -0.5f, 0), Vector2.left, 0.01f);
+            hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f, 0), Vector2.left, 0.0001f);
         } else if (Input.GetKey(KeyCode.D))
         {
-            hit  = Physics2D.Raycast(transform.position + new Vector3(0.5f, -0.5f, 0), Vector2.right, 0.01f);
+            hit  = Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f, 0), Vector2.right, 0.0001f);
         }
         if (hit.collider)
         {

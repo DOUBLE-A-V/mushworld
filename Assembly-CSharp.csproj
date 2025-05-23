@@ -761,8 +761,14 @@
     <Reference Include="Unity.2D.IK.Runtime">
       <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Aseprite.Editor">
       <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Unity.2D.Aseprite.Editor.dll</HintPath>
@@ -799,12 +805,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>C:\Users\z\AUNDEV\mushworld\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
