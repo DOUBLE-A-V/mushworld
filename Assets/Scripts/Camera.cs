@@ -3,23 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class Camera : MonoBehaviour
 {
     public bool followPlayer = true;
     [SerializeField] GameObject player;
-    [SerializeField] float movingDistance;
-    
+    [SerializeField] float movingSpeed;
     void Start()
     {
         
     }
-
-    void Update()
+    private void FixedUpdate()
     {
         if (followPlayer)
         {
-            transform.DOMove(new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z), 1f);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z), movingSpeed);
+            //transform.DOMove(new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z), movingSpeed);
         }
     }
 }
