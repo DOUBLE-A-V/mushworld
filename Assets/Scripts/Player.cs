@@ -38,40 +38,52 @@ public class Player : MonoBehaviour
         {
             if (right)
             {
-                hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0.5f, 0), Vector2.right, 0.05f);
-                if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f, 0), Vector2.right, 0.05f))
+                for (int i = 5; i >= -5; i--)
                 {
-                    float addY = 0.1f;
-                    while (true)
+                    float y = (float)i / 10;
+                    hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0.5f, 0), Vector2.right, 0.05f);
+                    if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(0.4f, y, 0), Vector2.right, 0.05f))
                     {
-                        hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f + addY, 0), Vector2.right, 0.05f);
-                        if (!hit.collider)
+                        float addY = 0.1f;
+                        while (true)
                         {
-                            rb.velocity = Vector2.zero;
-                            transform.position += new Vector3(0.5f, addY, 0);
-                            break;
+                            hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, y + addY, 0), Vector2.right, 0.05f);
+                            if (!hit.collider)
+                            {
+                                rb.velocity = Vector2.zero;
+                                transform.position += new Vector3(0.5f, y + addY + 0.5f, 0);
+                                break;
+                            }
+                            addY += 0.05f;
                         }
-                        addY += 0.05f;
-                    }
+
+                        break;
+                    }  
                 }
             }
             else
             {
-                hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0.5f, 0), Vector2.left, 0.05f);
-                if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f, 0), Vector2.left, 0.05f))
+                for (int i = 5; i >= 5; i--)
                 {
-                    float addY = 0.1f;
-                    while (true)
+                    float y = (float)i / 10;
+                    hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0.5f, 0), Vector2.left, 0.05f);
+                    if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(-0.4f, y, 0), Vector2.left, 0.05f))
                     {
-                        hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f + addY, 0), Vector2.left, 0.05f);
-                        if (!hit.collider)
+                        float addY = 0.1f;
+                        while (true)
                         {
-                            rb.velocity = Vector2.zero;
-                            transform.position -= new Vector3(0.5f, addY * -1, 0);
-                            break;
+                            hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, y + addY, 0), Vector2.left, 0.05f);
+                            if (!hit.collider)
+                            {
+                                rb.velocity = Vector2.zero;
+                                transform.position += new Vector3(-0.5f, addY + y + 0.5f, 0);
+                                break;
+                            }
+                            addY += 0.05f;
                         }
-                        addY += 0.05f;
-                    }
+
+                        break;
+                    }   
                 }
             }
         }
