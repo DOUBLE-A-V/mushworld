@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                for (int i = 5; i >= 5; i--)
+                for (int i = 5; i >= -5; i--)
                 {
                     float y = (float)i / 10;
                     hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0.5f, 0), Vector2.left, 0.05f);
@@ -76,14 +76,14 @@ public class Player : MonoBehaviour
                             if (!hit.collider)
                             {
                                 rb.velocity = Vector2.zero;
-                                transform.position += new Vector3(-0.5f, addY + y + 0.5f, 0);
+                                transform.position += new Vector3(-0.5f, y + addY + 0.5f, 0);
                                 break;
                             }
                             addY += 0.05f;
                         }
 
                         break;
-                    }   
+                    }  
                 }
             }
         }
