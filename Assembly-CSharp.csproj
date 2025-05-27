@@ -52,6 +52,7 @@
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
+    <Compile Include="Assets\Scripts\Effects.cs" />
     <None Include="Assets\DOTween_1_2_765\DOTween\readme.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.38f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

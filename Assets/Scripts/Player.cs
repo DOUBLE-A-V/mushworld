@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using InvManager;
+using Effects;
+using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
 {
@@ -21,84 +24,38 @@ public class Player : MonoBehaviour
     public float health = 5;
 
     private const int DAMAGE_NORMAL = 0;
+
+    Effects.Effects effects = new Effects.Effects();
     
-    private const int EFFECT_DEFENSE = 0;
-    
-    class Effect
+    void updateItemsEffects()
     {
-        public int type;
-        public int strength;
-        public List<int> parameters;
-        public Effect(int effectType_, int strength_)
+        Inventory.printInventory();
+        effects.clearItemsEffects();
+        foreach (Item item in Inventory.items)
         {
-            this.type = effectType_;
-            this.strength = strength_;
-        }
-    }
-
-    class Effects
-    {
-        public List<Effect> effects = new List<Effect>();
-
-        public void addEffect(Effect effect)
-        {
-            foreach (Effect e in this.effects)
+            foreach (int[] effect in item.effects)
             {
-                if (e.type == effect.type)
-                {
-                    e.strength += effect.strength;
-                    return;
-                }
-            }
-            this.effects.Add(effect);
-        }
-
-        public Effect addEffect(int type, int strength)
-        {
-            Effect effect = new Effect(type, strength);
-            this.addEffect(effect);
-            return effect;
-        }
-
-        public void clear()
-        {
-            this.effects.Clear();
-        }
-
-        public void removeEffect(Effect effect)
-        {
-            foreach (Effect e in this.effects)
-            {
-                if (e.type == effect.type)
-                {
-                    this.effects.Remove(e);
-                    return;
-                }
+                effects.addEffect(effect[0], effect[1], EffectSource.item, item.id);
             }
         }
-    }
-
-    Effects effects = new Effects();
-    
-    void updateEffects()
-    {
-        effects.clear();
-        foreach (InvManager.Item item in Inventory.items)
-        {
-            if (item.name == "shield")
-            {
-                effects.addEffect(EFFECT_DEFENSE, 15);
-            }
-        }
+        effects.print();
     }
     void Start()
     {
         new Item("null");
-        Inventory.addItem("ultratest");
-        Inventory.addItem("daun");
-        Inventory.printInventory();
-        Inventory.removeItem("ultratest");
-        Inventory.printInventory();
+        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
+        {
+            new int[2] {0, 17}
+        }));
+        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
+        {
+            new int[2] {0, 13}
+        }));
+        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
+        {
+            new int[2] {0, 24}
+        }));
+        updateItemsEffects();
     }
 
     public float affectDamage(int type, int amount)
@@ -110,7 +67,7 @@ public class Player : MonoBehaviour
                 {
                     switch (effect.type)
                     {
-                        case EFFECT_DEFENSE:
+                        case Effect.EFFECT_DEFENSE:
                             amount = (effect.strength / 100) * amount;
                             break;
                     }

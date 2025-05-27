@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 namespace InvManager
 {
@@ -10,9 +11,8 @@ namespace InvManager
         static private Dictionary<string, List<float>> itemsFloatDataPresets =  new Dictionary<string, List<float>>();
         static private Dictionary<string, Vector2> itemsSizeDataPresets =  new Dictionary<string, Vector2>()
         {
-            { "ultratest", new Vector2(2, 2) },
-            { "daun", new Vector2(3, 1) }
         };
+        static private Dictionary<string, List<int[]>> itemsEffectsDataPresets =  new Dictionary<string, List<int[]>>();
         
         static private uint idCounter = 0;
         static public List<Item> allItems = new List<Item>();
@@ -25,6 +25,7 @@ namespace InvManager
         public List<string> stringData = new List<string>();
         public List<float> floatData = new List<float>();
         public uint realItemId = 0;
+        public List<int[]> effects = new List<int[]>();
 
         public static Item getItem(string itemName)
         {
@@ -46,7 +47,7 @@ namespace InvManager
                 if (item.id == id)
                 {
                     return item;
-                }
+                }   
             }
             return null;
         }
@@ -69,26 +70,13 @@ namespace InvManager
             
             string itemName = item.name;
             
-            if (itemsStringDataPresets.ContainsKey(itemName))
-            {
-                foreach (string el in itemsStringDataPresets[itemName])
-                {
-                    this.stringData.Add(el);
-                }
-            }
-
-            if (itemsFloatDataPresets.ContainsKey(itemName))
-            {
-                foreach (float el in itemsFloatDataPresets[itemName])
-                {
-                    this.floatData.Add(el);
-                }   
-            }
-
-            if (itemsSizeDataPresets.ContainsKey(itemName))
-            {
-                this.size = itemsSizeDataPresets[itemName];
-            }
+            this.stringData.AddRange(item.stringData);
+            this.floatData.AddRange(item.floatData);
+            this.effects.AddRange(item.effects);
+            
+            this.size = item.size;
+            this.position = item.position;
+            
             allItems.Add(this);
         }
 
@@ -102,7 +90,7 @@ namespace InvManager
             allItems.Remove(this);
         }
         
-        public Item(string itemName)
+        public Item(string itemName, Vector2? size = null, List<int[]> effects = null)
         {
             idCounter++;
             this.id = idCounter;
@@ -127,6 +115,21 @@ namespace InvManager
             {
                 this.size = itemsSizeDataPresets[itemName];
             }
+            
+            if (itemsEffectsDataPresets.ContainsKey(itemName))
+            {
+                this.effects = itemsEffectsDataPresets[itemName];
+            }
+
+            if (size != null)
+            {
+                this.size = size.Value;
+            }
+
+            if (effects != null)
+            {
+                this.effects.AddRange(effects);
+            }
             allItems.Add(this);
         }
     }
@@ -135,7 +138,7 @@ namespace InvManager
         public List<List<Item>> cells = new List<List<Item>>()
         {
             new List<Item>() {null, null, null, null},
-            new List<Item>() {null ,null, null, null},
+            new List<Item>() {null, null, null, null},
             new List<Item>() {null, null, null, null},
             new List<Item>() {null, null, null, null},
         };
@@ -193,8 +196,11 @@ namespace InvManager
         public Item addItem(string itemName)
         {
             Item item = new Item(itemName);
-            addItem(item);
-            return item;
+            if (addItem(item))
+            {
+                return item;   
+            }
+            return null;
         }
 
         public Item getItem(string itemName)
@@ -416,7 +422,7 @@ namespace InvManager
                     nowPos.x = savePos.x;
                     for (int j = 0; j < item.size.x; j++)
                     {
-                        Item itemBase = new Item(item.name);
+                        Item itemBase = new Item(item);
                         itemBase.itemPartId = (int)(j + i * item.size.x);
                         itemBase.realItemId = item.id;
                         if (itemBase.itemPartId == 0)
