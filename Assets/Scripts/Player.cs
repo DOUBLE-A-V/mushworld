@@ -30,16 +30,64 @@ public class Player : MonoBehaviour
     
     void updateItemsEffects()
     {
-        Inventory.printInventory();
         effects.clearItemsEffects();
         foreach (Item item in Inventory.items)
         {
             foreach (int[] effect in item.effects)
             {
-                effects.addEffect(effect[0], effect[1], EffectSource.item, item.id, (float)effect[2]);
+                if (effect[2] == 0)
+                {
+                    effects.addEffect(effect[0], effect[1], EffectSource.item, item.id);   
+                }
             }
         }
         effects.print();
+    }
+
+    void eatItem(string name)
+    {
+        foreach (Item item in Inventory.items)
+        {
+            if (item.name == name)
+            {
+                eatItem(item);
+            }
+        }
+    }
+    void eatItem(Item item)
+    {
+        List<Effect> removeList = new List<Effect>();
+        List<Effect> addList = new List<Effect>();
+        
+        foreach (int[] effect in item.effects)
+        {
+            if (effect[2] != 0)
+            {
+                addList.Add(new Effect(effect[0], effect[1], EffectSource.item, item.id, effect[2]));
+            }
+            else
+            {
+                removeList.Add(effects.getEffectBySource(EffectSource.item, item.id, effect[0]));
+            }
+        }
+
+        foreach (Effect effect in removeList)
+        {
+            effects.removeEffect(effect);
+        }
+        removeList.Clear();
+
+        foreach (Effect effect in addList)
+        {
+            effects.addEffect(effect);
+        }
+        addList.Clear();
+        
+        if (Inventory.hasItem(item.id))
+        {
+            Inventory.removeItem(item.id);
+        }
+        Item.removeItem(item.id);
     }
     void Start()
     {
@@ -52,11 +100,12 @@ public class Player : MonoBehaviour
         {
             new int[3] {0, 13, 0}
         }));
-        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
+        Inventory.addItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
         {
-            new int[3] {0, 24, 5}
+            new int[3] { 1, 15, 5 }
         }));
         updateItemsEffects();
+        Inventory.printInventory();
     }
 
     public float affectDamage(int type, int amount)
@@ -214,6 +263,14 @@ public class Player : MonoBehaviour
             compareControls();
         }
         effects.updateTimers(Time.deltaTime);
+
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            eatItem("apple");
+        }
+        print("sep 1 ---");
+        effects.print();
+        print("sep 2 ---");
     }
 
     private void FixedUpdate()

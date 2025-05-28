@@ -52,15 +52,21 @@ namespace InvManager
             return null;
         }
 
-        public static void deleteItem(uint id)
+        public static void removeItem(uint id)
         {
             foreach (Item item in allItems)
             {
                 if (item.id == id)
                 {
                     allItems.Remove(item);
+                    break;
                 }
             }
+        }
+
+        public static void removeItem(Item item)
+        {
+            allItems.Remove(item);
         }
         public Item(Item item)
         {

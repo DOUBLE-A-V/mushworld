@@ -14,6 +14,7 @@ namespace Effects
     class Effect
     {
         public const int EFFECT_DEFENSE = 0;
+        public const int EFFECT_REGENERATION = 1;
 
         public const int SOURCE_NONE = 0;
         public const int SOURCE_ITEM = 1;
@@ -59,6 +60,8 @@ namespace Effects
             {
                 case EFFECT_DEFENSE:
                     return "defense";
+                case EFFECT_REGENERATION:
+                    return "regeneration";
             }
 
             return "unknown";
@@ -167,7 +170,7 @@ namespace Effects
             return null;
         }
 
-        public Effect getEffectBySource(uint sourceID, EffectSource effectSource, int type = -1)
+        public Effect getEffectBySource(EffectSource effectSource, uint sourceID, int type = -1)
         {
             foreach (Effect effect in effects)
             {
@@ -242,6 +245,19 @@ namespace Effects
                 }
             }
         }
+        
+        public void removeEffectBySource(EffectSource effectSource, uint sourceID, int type = -1)
+        {
+            foreach (Effect e in this.effects)
+            {
+                if (e.sourceType == effectSource && e.sourceID == sourceID && (e.type == type || type == -1))
+                {
+                    this.effects.Remove(e);
+                    break;
+                }
+            }
+        }
+        
         public void removeEffect(int type)
         {
             List<Effect> removeList = new List<Effect>();
