@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using InvManager;
 using Effects;
+using Effect = Effects.Effect;
 using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
@@ -35,7 +36,7 @@ public class Player : MonoBehaviour
         {
             foreach (int[] effect in item.effects)
             {
-                effects.addEffect(effect[0], effect[1], EffectSource.item, item.id);
+                effects.addEffect(effect[0], effect[1], EffectSource.item, item.id, (float)effect[2]);
             }
         }
         effects.print();
@@ -45,15 +46,15 @@ public class Player : MonoBehaviour
         new Item("null");
         Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
         {
-            new int[2] {0, 17}
+            new int[3] {0, 17, 0}
         }));
         Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
         {
-            new int[2] {0, 13}
+            new int[3] {0, 13, 0}
         }));
         Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
         {
-            new int[2] {0, 24}
+            new int[3] {0, 24, 5}
         }));
         updateItemsEffects();
     }
@@ -212,6 +213,7 @@ public class Player : MonoBehaviour
         {
             compareControls();
         }
+        effects.updateTimers(Time.deltaTime);
     }
 
     private void FixedUpdate()

@@ -23,12 +23,20 @@ namespace Effects
         public List<int> parameters;
         public EffectSource sourceType = 0;
         public uint sourceID = 0;
-        public Effect(int effectType_, int strength_, EffectSource sourceType_ = EffectSource.none, uint sourceID_ = 0)
+        public float timer = 0f;
+        public bool haveTimer = false;
+        
+        public Effect(int effectType_, int strength_, EffectSource sourceType_ = EffectSource.none, uint sourceID_ = 0, float timer_ = 0f)
         {
             this.type = effectType_;
             this.strength = strength_;
             this.sourceType = sourceType_;
             this.sourceID = sourceID_;
+            if (timer_ != 0f)
+            {
+                this.haveTimer = true;
+                this.timer = timer_;
+            }
         }
 
         public Item getSourceItem()
@@ -87,6 +95,32 @@ namespace Effects
 
         public List<Effect> effectsCalced = new List<Effect>();
 
+        public void updateTimers(float delta)
+        {
+            List<Effect> removeList = new List<Effect>();
+            foreach (Effect effect in effects)
+            {
+                if (effect.haveTimer)
+                {
+                    effect.timer -= delta;
+                    if (effect.timer <= 0)
+                    {
+                        removeList.Add(effect);
+                    }
+                }
+            }
+
+            foreach (Effect effect in removeList)
+            {
+                effects.Remove(effect);
+            }
+
+            if (removeList.Count > 0)
+            {
+                calcEffects();
+            }
+        }
+        
         public void calcEffects()
         {
             this.effectsCalced.Clear();
@@ -151,9 +185,9 @@ namespace Effects
             this.calcEffects();
         }
 
-        public Effect addEffect(int type, int strength, EffectSource sourceType = EffectSource.none, uint sourceID = 0)
+        public Effect addEffect(int type, int strength, EffectSource sourceType = EffectSource.none, uint sourceID = 0, float timer = 0f)
         {
-            Effect effect = new Effect(type, strength, sourceType, sourceID);
+            Effect effect = new Effect(type, strength, sourceType, sourceID, timer);
             this.addEffect(effect);
             return effect;
         }
@@ -231,7 +265,14 @@ namespace Effects
         {
             foreach (Effect e in this.effects)
             {
-                Debug.Log(e.stringifyType() + ": " + e.strength.ToString() + " " + e.stringifyParameters() + " | " + e.sourceType.ToString() + ":" + e.sourceID.ToString());
+                if (e.haveTimer)
+                {
+                    Debug.Log(e.stringifyType() + ": " + e.strength.ToString() + " (" + e.timer.ToString() + " sec.) " + e.stringifyParameters() + " | " + e.sourceType.ToString() + ":" + e.sourceID.ToString());
+                }
+                else
+                {
+                    Debug.Log(e.stringifyType() + ": " + e.strength.ToString() + " " + e.stringifyParameters() + " | " + e.sourceType.ToString() + ":" + e.sourceID.ToString());   
+                }
             }
         }
 
