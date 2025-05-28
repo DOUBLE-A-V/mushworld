@@ -263,14 +263,6 @@ public class Player : MonoBehaviour
             compareControls();
         }
         effects.updateTimers(Time.deltaTime);
-
-        if (Input.GetKeyUp(KeyCode.G))
-        {
-            eatItem("apple");
-        }
-        print("sep 1 ---");
-        effects.print();
-        print("sep 2 ---");
     }
 
     private void FixedUpdate()

@@ -7,6 +7,10 @@ namespace InvManager
     public class Item
     {
         // all items presets
+        static private Dictionary<string, string> itemsTexturesPresets = new  Dictionary<string, string>()
+        {
+            {"apple", "apple"}
+        }; 
         static private Dictionary<string, List<string>> itemsStringDataPresets =  new Dictionary<string, List<string>>();
         static private Dictionary<string, List<float>> itemsFloatDataPresets =  new Dictionary<string, List<float>>();
         static private Dictionary<string, Vector2> itemsSizeDataPresets =  new Dictionary<string, Vector2>()
