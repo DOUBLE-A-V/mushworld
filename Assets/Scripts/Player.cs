@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce;
+    [SerializeField] private UI ui;
     
     private bool pressedJump = false;
     public Vector2 movingSpeed;
@@ -106,6 +107,7 @@ public class Player : MonoBehaviour
         }));
         updateItemsEffects();
         Inventory.printInventory();
+        ui.openInventory("fuck", Inventory);
     }
 
     public float affectDamage(int type, int amount)

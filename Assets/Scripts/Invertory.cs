@@ -7,7 +7,7 @@ namespace InvManager
     public class Item
     {
         // all items presets
-        static private Dictionary<string, string> itemsTexturesPresets = new  Dictionary<string, string>()
+        static private Dictionary<string, string> itemsPrefabsPresets = new  Dictionary<string, string>()
         {
             {"apple", "apple"}
         }; 
@@ -30,6 +30,8 @@ namespace InvManager
         public List<float> floatData = new List<float>();
         public uint realItemId = 0;
         public List<int[]> effects = new List<int[]>();
+
+        public string prefab;
 
         public static Item getItem(string itemName)
         {
@@ -86,6 +88,7 @@ namespace InvManager
             
             this.size = item.size;
             this.position = item.position;
+            this.prefab = item.prefab;
             
             allItems.Add(this);
         }
@@ -105,6 +108,12 @@ namespace InvManager
             idCounter++;
             this.id = idCounter;
             this.name = itemName;
+
+            if (itemsPrefabsPresets.ContainsKey(itemName))
+            {
+                this.prefab = itemsPrefabsPresets[itemName];
+            }
+            
             if (itemsStringDataPresets.ContainsKey(itemName))
             {
                 foreach (string el in itemsStringDataPresets[itemName])
@@ -147,11 +156,12 @@ namespace InvManager
     {
         public List<List<Item>> cells = new List<List<Item>>()
         {
-            new List<Item>() {null, null, null, null},
-            new List<Item>() {null, null, null, null},
-            new List<Item>() {null, null, null, null},
-            new List<Item>() {null, null, null, null},
+            new List<Item>() {null, null, null, null, null},
+            new List<Item>() {null, null, null, null, null},
+            new List<Item>() {null, null, null, null, null},
+            new List<Item>() {null, null, null, null, null},
         };
+        public Vector2 size = new Vector2(5, 4);
         public List<Item> items = new List<Item>();
 
         public void printInventory()
@@ -190,17 +200,19 @@ namespace InvManager
             Debug.Log(finalString);
         }
         
-        public void refactorCells(Vector2 size)
+        public void refactorCells(Vector2 size_)
         {
             cells.Clear();
-            for (int i = 0; i < size.y; i++)
+            for (int i = 0; i < size_.y; i++)
             {
                 cells.Add(new List<Item>());
-                for (int j = 0; j < size.x; j++)
+                for (int j = 0; j < size_.x; j++)
                 {
                     cells[cells.Count-1].Add(null);
                 }
             }
+
+            this.size = size_;
         }
         
         public Item addItem(string itemName)
