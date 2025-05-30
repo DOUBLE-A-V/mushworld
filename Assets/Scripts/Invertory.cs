@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using JetBrains.Annotations;
 using UnityEngine;
 namespace InvManager
@@ -30,7 +31,8 @@ namespace InvManager
         public List<float> floatData = new List<float>();
         public uint realItemId = 0;
         public List<int[]> effects = new List<int[]>();
-
+        public bool eatable = false;
+        
         public string prefab;
 
         public static Item getItem(string itemName)
@@ -89,6 +91,7 @@ namespace InvManager
             this.size = item.size;
             this.position = item.position;
             this.prefab = item.prefab;
+            this.eatable = item.eatable;
             
             allItems.Add(this);
         }
@@ -103,12 +106,13 @@ namespace InvManager
             allItems.Remove(this);
         }
         
-        public Item(string itemName, Vector2? size = null, List<int[]> effects = null)
+        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)
         {
             idCounter++;
             this.id = idCounter;
             this.name = itemName;
-
+            this.eatable = eatable;
+            
             if (itemsPrefabsPresets.ContainsKey(itemName))
             {
                 this.prefab = itemsPrefabsPresets[itemName];
@@ -176,15 +180,8 @@ namespace InvManager
                 {
                     if (i2 != null)
                     {
-                        if (i2.position == countPosition)
-                        {
-                            lineText += i2.name + "|";
-                        }
-                        else
-                        {
-                            Vector2 calc = countPosition - i2.position;
-                            lineText += i2.name + " #" + i2.itemPartId.ToString() + "|";
-                        }
+                        Vector2 calc = countPosition - i2.position;
+                        lineText += i2.name + " #" + i2.itemPartId.ToString() + "|";
                     }
                     else
                     {
@@ -411,6 +408,37 @@ namespace InvManager
         {
             return Item.getItem(item.realItemId);
         }
+
+        public bool insertItem(Item item, Vector2 position)
+        {
+            if (checkSuitable(item, position))
+            {
+                Vector2 savePos = position;
+                for (int i = 0; i < item.size.y; i++)
+                {
+                    position.x = savePos.x;
+                    for (int j = 0; j < item.size.x; j++)
+                    {
+                        Item itemBase = new Item(item);
+                        itemBase.itemPartId = (int)(j + i * item.size.x);
+                        itemBase.realItemId = item.id;
+                        if (itemBase.itemPartId == 0)
+                        {
+                            itemBase.id = item.id;
+                            items.Add(itemBase);
+                        }
+                        setCell(itemBase, position);
+                        itemBase.position = position;
+                        position.x++;
+                    }
+                    position.y++;
+                }
+                item.delete();
+                return true;
+            }
+
+            return false;
+        }
         public bool addItem(Item item)
         {
             Vector2 nowPos = new Vector2(0, 0);
@@ -453,12 +481,14 @@ namespace InvManager
                             items.Add(itemBase);
                         }
                         setCell(itemBase, nowPos);
+                        itemBase.position = nowPos;
                         nowPos.x++;
                     }
                     nowPos.y++;
                 }
+                item.delete();
+                return true;
             }
-            item.delete();
             return false;
         }
     }

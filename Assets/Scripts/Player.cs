@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     {
         foreach (Item item in Inventory.items)
         {
-            if (item.name == name)
+            if (item.name == name && item.eatable)
             {
                 eatItem(item);
             }
@@ -57,57 +57,72 @@ public class Player : MonoBehaviour
     }
     void eatItem(Item item)
     {
-        List<Effect> removeList = new List<Effect>();
-        List<Effect> addList = new List<Effect>();
+        if (item.eatable)
+        {
+            List<Effect> removeList = new List<Effect>();
+            List<Effect> addList = new List<Effect>();
         
-        foreach (int[] effect in item.effects)
-        {
-            if (effect[2] != 0)
+            foreach (int[] effect in item.effects)
             {
-                addList.Add(new Effect(effect[0], effect[1], EffectSource.item, item.id, effect[2]));
+                if (effect[2] != 0)
+                {
+                    addList.Add(new Effect(effect[0], effect[1], EffectSource.item, item.id, effect[2]));
+                }
+                else
+                {
+                    removeList.Add(effects.getEffectBySource(EffectSource.item, item.id, effect[0]));
+                }
             }
-            else
+
+            foreach (Effect effect in removeList)
             {
-                removeList.Add(effects.getEffectBySource(EffectSource.item, item.id, effect[0]));
+                effects.removeEffect(effect);
             }
-        }
+            removeList.Clear();
 
-        foreach (Effect effect in removeList)
-        {
-            effects.removeEffect(effect);
-        }
-        removeList.Clear();
-
-        foreach (Effect effect in addList)
-        {
-            effects.addEffect(effect);
-        }
-        addList.Clear();
+            foreach (Effect effect in addList)
+            {
+                effects.addEffect(effect);
+            }
+            addList.Clear();
         
-        if (Inventory.hasItem(item.id))
-        {
-            Inventory.removeItem(item.id);
+            if (Inventory.hasItem(item.id))
+            {
+                Inventory.removeItem(item.id);
+            }
+            Item.removeItem(item.id);
         }
-        Item.removeItem(item.id);
     }
     void Start()
     {
+        InventoryManager subInventory = new InventoryManager();
         new Item("null");
-        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
-        {
-            new int[3] {0, 17, 0}
-        }));
-        Inventory.addItem(new Item("shield", new Vector2(2, 2), new List<int[]>()
-        {
-            new int[3] {0, 13, 0}
-        }));
-        Inventory.addItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
+        Inventory.refactorCells(new Vector2(9, 6));
+        Inventory.addItem(new Item("apple", new Vector2(5, 3), new List<int[]>()
         {
             new int[3] { 1, 15, 5 }
         }));
+        Inventory.insertItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
+        {
+            new int[3] { 1, 15, 5 }
+        }), new Vector2(5, 5));
+        
+        for (int i = 0; i < 9; i++)
+        {
+            subInventory.addItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
+            {
+                new int[3] { 1, 15, 5 }
+            }));
+        }
+        subInventory.addItem(new Item("apple", new Vector2(2, 2), new List<int[]>()
+        {
+            new int[3] { 1, 15, 5 }
+        }));
+        
         updateItemsEffects();
         Inventory.printInventory();
         ui.openInventory("fuck", Inventory);
+        ui.openInventory("fuck 2", subInventory);
     }
 
     public float affectDamage(int type, int amount)
@@ -258,6 +273,18 @@ public class Player : MonoBehaviour
             movingSpeed.x = 0;
         }
     }
+
+    public void toggleInventory()
+    {
+        if (ui.state == 0)
+        {
+            ui.openInventory("инвентарь", Inventory);
+        }
+        else
+        {
+            ui.closeInventory();
+        }
+    }
     void Update()
     {
         if (!controlsLocked)
@@ -265,6 +292,10 @@ public class Player : MonoBehaviour
             compareControls();
         }
         effects.updateTimers(Time.deltaTime);
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            toggleInventory();
+        }
     }
 
     private void FixedUpdate()
