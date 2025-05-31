@@ -304,8 +304,9 @@ namespace InvManager
                     {
                         if (item != null)
                         {
-                            if (item.realItemId == id)
+                            if (item.realItemId == id || (item.realItemId == 0 && item.id == id))
                             {
+                                item.realItemId = id;
                                 posesRemoving.Add(countPos);
                                 if (item.itemPartId != 0)
                                 {
@@ -317,7 +318,6 @@ namespace InvManager
                     }
                     countPos.y++;
                 }
-
                 foreach (Vector2 pos in posesRemoving)
                 {
                     setCell(null, pos);

@@ -18,10 +18,11 @@ public class ItemObject : MonoBehaviour
     private Vector2 startMousePos;
 	
     private bool leftPressed = false;
+    private bool leftPressed2 = false;
     private bool pressingBlocked = false;
 	
     public bool dragging = false;
-
+    public bool replaceMe = false;
 
     private void Start()
     {
@@ -47,6 +48,24 @@ public class ItemObject : MonoBehaviour
         {
             touching = false;
             image.color = new Color(1f, 1f, 1f, 1);
+        }
+
+        if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift))
+        {
+            if (touching)
+            {
+                if (!leftPressed2)
+                {
+                    replaceMe = true;
+                }
+            }
+
+            leftPressed2 = true;
+        }
+        else
+        {
+            leftPressed2 = false;
+            replaceMe = false;
         }
         
         if (Input.GetMouseButton(0))

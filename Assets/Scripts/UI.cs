@@ -60,6 +60,59 @@ public class UI : MonoBehaviour
 			}
 		}
 	}
+
+	void updateReplaceRequests(bool sub = false)
+	{
+		List<ItemObject> itemsList;
+		if (sub)
+		{
+			itemsList = subItems;
+		}
+		else
+		{
+			itemsList = items;
+		}
+		foreach (ItemObject item in itemsList)
+		{
+			if (item.replaceMe)
+			{
+				if (item.sub)
+				{
+					Item invItem = Item.getItem(item.itemID);
+					if (nowInventory.addItem(invItem))
+					{
+						invItem = nowInventory.getItem(item.itemID);
+						subInventory.removeItem(item.itemID);
+						subItems.Add(item);
+						items.Remove(item);
+						item.sub = false;
+					
+						item.smoothMove(cellStartPos + invItem.position * new Vector2(1, -1) * 
+							cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
+					}
+					item.replaceMe = false;
+				}
+				else
+				{
+					Item invItem = Item.getItem(item.itemID);
+					if (subInventory.addItem(invItem))
+					{
+						invItem = subInventory.getItem(item.itemID);
+						nowInventory.removeItem(item.itemID);
+						items.Add(item);
+						subItems.Remove(item);
+						item.sub = true;
+						item.smoothMove(subCellStartPos + invItem.position * new Vector2(1, -1) * 
+							cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
+					}
+					item.replaceMe = false;
+
+				}
+
+				break;
+			}
+		}
+	}
 	void Update()
 	{
 		updateTouchingCell();
@@ -70,6 +123,23 @@ public class UI : MonoBehaviour
 			nowInventory.printInventory();
 			Debug.Log("sub inventory:");
 			subInventory.printInventory();
+		}
+
+		if (state == SUB_OPENED)
+		{
+			updateReplaceRequests();
+			updateReplaceRequests(true);
+		}
+		else
+		{
+			foreach (ItemObject item in items)
+			{
+				item.replaceMe = false;
+			}
+			foreach (ItemObject item in subItems)
+			{
+				item.replaceMe = false;
+			}
 		}
 	}
 
@@ -169,8 +239,8 @@ public class UI : MonoBehaviour
 				if (item.dragging && !isDragging)
 				{
 					isDragging = true;
-					draggingOffset = touchingCell.position - inventoryUsing.getItem(item.itemID).position;
-					saveItemPos = inventoryUsing.getItem(item.itemID).position;
+					draggingOffset = touchingCell.position - Item.getItem(item.itemID).position;
+					saveItemPos = Item.getItem(item.itemID).position;
 					draggingItem = item;
 
 					if (draggingItem.sub)
