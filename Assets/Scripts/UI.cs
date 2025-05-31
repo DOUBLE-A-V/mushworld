@@ -74,6 +74,25 @@ public class UI : MonoBehaviour
 		}
 		foreach (ItemObject item in itemsList)
 		{
+			if (item.replaceAnyOther)
+			{
+				bool otherReplaced = false;
+				foreach (ItemObject item2 in itemsList)
+				{
+					if (item2.itemName == item.itemName && item2.itemID != item.itemID)
+					{
+						item2.replaceMe = true;
+						otherReplaced = true;
+						break;
+					}
+				}
+
+				if (!otherReplaced)
+				{
+					item.replaceMe = true;
+				}
+				item.replaceAnyOther = false;
+			}
 			if (item.replaceMe)
 			{
 				if (item.sub)
@@ -83,8 +102,8 @@ public class UI : MonoBehaviour
 					{
 						invItem = nowInventory.getItem(item.itemID);
 						subInventory.removeItem(item.itemID);
-						subItems.Add(item);
-						items.Remove(item);
+						subItems.Remove(item);
+						items.Add(item);
 						item.sub = false;
 					
 						item.smoothMove(cellStartPos + invItem.position * new Vector2(1, -1) * 
@@ -99,8 +118,8 @@ public class UI : MonoBehaviour
 					{
 						invItem = subInventory.getItem(item.itemID);
 						nowInventory.removeItem(item.itemID);
-						items.Add(item);
-						subItems.Remove(item);
+						items.Remove(item);
+						subItems.Add(item);
 						item.sub = true;
 						item.smoothMove(subCellStartPos + invItem.position * new Vector2(1, -1) * 
 							cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
