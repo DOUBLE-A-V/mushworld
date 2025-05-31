@@ -273,28 +273,11 @@ namespace InvManager
 
         public Item getCell(Vector2 position)
         {
-            if (position.x > cells[0].Count - 1 || position.y > cells[0].Count - 1)
+            if (position.x > this.size.x - 1 || position.y > this.size.y - 1 || position.x < 0 || position.y < 0)
             {
                 return Item.getItem("null");
             }
-            return cells[(int)position.y][(int)position.x];
-            /*
-            Vector2 countPos = new Vector2(0, 0);
-            foreach (List<Item> line in cells)
-            {
-                countPos.x = 0;
-                foreach (Item i in line)
-                {
-                    if (countPos == position)
-                    {
-                        return i;
-                    }
-                    countPos.x++;
-                }
-                countPos.y++;
-            }
-            return null;
-            */
+            return this.cells[(int)position.y][(int)position.x];
         }
 
         public Item removeItem(uint id)

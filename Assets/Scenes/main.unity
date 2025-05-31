@@ -741,6 +741,8 @@ MonoBehaviour:
   inventoryTitle: {fileID: 1273573525}
   subInventoryTitle: {fileID: 141537578}
   cellSize: 50
+  state: 0
+  touchingCell: {fileID: 0}
 --- !u!114 &1555769080
 MonoBehaviour:
   m_ObjectHideFlags: 0
