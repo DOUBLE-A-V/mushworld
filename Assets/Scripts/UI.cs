@@ -8,12 +8,16 @@ using Unity.VisualScripting;
 using Inventory = InvManager.InventoryManager;
 using Item = InvManager.Item;
 using UnityEngine.UI;
+using TipsTranslates;
 
 public class UI : MonoBehaviour
 {
 	[SerializeField] GameObject cellPrefab;
 	[SerializeField] TMP_Text inventoryTitle;
 	[SerializeField] TMP_Text subInventoryTitle;
+	[SerializeField] TMP_Text tip;
+	
+	
 	public float cellSize = 50;
 	public Inventory nowInventory;
 	public Inventory subInventory;
@@ -30,7 +34,7 @@ public class UI : MonoBehaviour
 	
 	public int state = 0;
 
-	public Cell touchingCell;
+	private Cell touchingCell;
 
 	private bool isDragging = false;
 	private Vector2 draggingOffset;
@@ -39,6 +43,18 @@ public class UI : MonoBehaviour
 	private Vector2 cellStartPos;
 	private Vector2 subCellStartPos;
 	private Vector2 saveItemPos;
+
+	public void showTakeTip(string itemName)
+	{
+		tip.text = Translates.translates[itemName] + "\nF чтобы подобрать";
+		tip.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
+		tip.gameObject.SetActive(true);
+	}
+
+	public void hideTakeTip()
+	{
+		tip.gameObject.SetActive(false);
+	}
 	
 	private void updateTouchingCell()
 	{

@@ -97,6 +97,7 @@ public class Player : MonoBehaviour
     {
         InventoryManager subInventory = new InventoryManager();
         new Item("null");
+        new Item("apple", new Vector2(1, 1));
         Inventory.refactorCells(new Vector2(9, 6));
         Inventory.addItem(new Item("apple", new Vector2(5, 3), new List<int[]>()
         {
@@ -156,12 +157,19 @@ public class Player : MonoBehaviour
 
     void jump()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position - new Vector3(0, 1, 0), Vector2.down, 0.2f);
-        if (hit.collider != false && hit.distance < 0.05f)
+        RaycastHit2D hit;
+        bool jumped = false;
+        for (int i = -4; i < 5; i++)
         {
-            rb.AddForce(new Vector2(0, jumpForce));
+            hit = Physics2D.Raycast(transform.position - new Vector3((float)i/10f, 1, 0), Vector2.down, 0.01f);
+            if (hit.collider)
+            {
+                rb.AddForce(new Vector2(0, jumpForce));
+                jumped = true;
+                break;
+            }
         }
-        else
+        if (!jumped)
         {
             if (right)
             {
@@ -270,7 +278,10 @@ public class Player : MonoBehaviour
         }
         if (hit.collider)
         {
-            movingSpeed.x = 0;
+            if (!hit.collider.CompareTag("worldItem"))
+            {
+                movingSpeed.x = 0;
+            }
         }
     }
 
