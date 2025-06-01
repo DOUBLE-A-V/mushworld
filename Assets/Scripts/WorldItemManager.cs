@@ -6,7 +6,7 @@ using InvManager;
 public class WorldItemManager : MonoBehaviour
 {
     [SerializeField] private Player player;
-
+    
     private List<WorldItem> worldItems = new List<WorldItem>();
     
     public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)

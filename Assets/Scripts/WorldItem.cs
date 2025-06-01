@@ -34,11 +34,6 @@ public class WorldItem : MonoBehaviour
             boxCollider = GetComponent<BoxCollider2D>();
             rb = GetComponent<Rigidbody2D>();
         }
-
-        if (itemSize.x != itemSize.y)
-        {
-            rb.freezeRotation = true;
-        }
         
         Vector2 pixelSize = itemSize * ui.cellSize / 100;
         
@@ -71,12 +66,14 @@ public class WorldItem : MonoBehaviour
         Debug.Log(sprite);
     }
 
-    private bool isMouseTouching()
+    void OnMouseEnter()
     {
-        Vector3 mousePos = UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
-        
-        return mousePos.x > transform.position.x - size.x / 2 && mousePos.x < transform.position.x + size.x / 2 &&
-               mousePos.y > transform.position.y - size.y / 2 && mousePos.y < transform.position.y + size.y / 2;
+        touching = true;
+    }
+
+    void OnMouseExit()
+    {
+        touching = false;
     }
     
     void Update()
@@ -108,7 +105,6 @@ public class WorldItem : MonoBehaviour
             }
         }
         
-        touching = isMouseTouching();
         if (ui.state == 0)
         {
             if (touching)
