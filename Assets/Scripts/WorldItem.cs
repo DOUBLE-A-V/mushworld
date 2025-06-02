@@ -18,13 +18,13 @@ public class WorldItem : MonoBehaviour
     private SpriteRenderer sprite;
     public Vector2 size;
     
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     
     private bool visible = true;
 
     private int frameCount = 0;
-
+    
     public void changeSize(Vector2 itemSize)
     {
         if (!ui)
@@ -125,8 +125,9 @@ public class WorldItem : MonoBehaviour
             {
                 if (player.Inventory.addItem(Item.getItem(id)))
                 {
-                    Destroy(gameObject);
+                    ui.worldItemManager.worldItems.Remove(this);
                     ui.hideTakeTip();
+                    Destroy(gameObject);
                 }
             }
         }

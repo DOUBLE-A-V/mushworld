@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 749078207}
+  worldItems: []
 --- !u!1 &682697461
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +922,7 @@ MonoBehaviour:
   inventoryTitle: {fileID: 1273573525}
   subInventoryTitle: {fileID: 141537578}
   tip: {fileID: 682697463}
+  worldItemManager: {fileID: 556014673}
   cellSize: 50
   state: 0
 --- !u!114 &1555769080

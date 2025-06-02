@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
 	[SerializeField] TMP_Text inventoryTitle;
 	[SerializeField] TMP_Text subInventoryTitle;
 	[SerializeField] TMP_Text tip;
+	[SerializeField] public WorldItemManager worldItemManager;
 	
 	
 	public float cellSize = 50;

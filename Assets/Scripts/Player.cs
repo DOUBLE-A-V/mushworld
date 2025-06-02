@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce;
-    [SerializeField] private UI ui;
+    [SerializeField] public UI ui;
     
     private bool pressedJump = false;
     public Vector2 movingSpeed;
