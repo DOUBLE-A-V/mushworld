@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using InvManager;
+using Debug = UnityEngine.Debug;
 
 public class WorldItemManager : MonoBehaviour
 {
@@ -11,7 +13,8 @@ public class WorldItemManager : MonoBehaviour
     public List<WorldItem> worldItems = new List<WorldItem>();
 
     private WorldItem worldItemDragging = null;
-    
+
+    private Vector3 offset;
     public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)
     {
         Item item = new Item(itemName, size, effects, eatable);
@@ -67,6 +70,9 @@ public class WorldItemManager : MonoBehaviour
                         {
                             worldItemDragging = worldItem;
                             worldItemDragging.rb.gravityScale = 0;
+                            Vector2 localMousePosition = worldItemDragging.getLocalMousePosition();
+                            worldItemDragging.rb.centerOfMass = localMousePosition;
+                            offset = localMousePosition;
                             break;
                         }
                     }
@@ -75,7 +81,7 @@ public class WorldItemManager : MonoBehaviour
                 if (worldItemDragging)
                 {
                     Vector3 mouseWorldPosition = getMouseWorldPosition();
-                    Vector3 delta = mouseWorldPosition - worldItemDragging.transform.position;
+                    Vector3 delta = mouseWorldPosition - worldItemDragging.transform.position - offset;
 
                     float coef = 0.9f;
                     float distance = Vector3.Distance(worldItemDragging.transform.position, mouseWorldPosition) * 5;
@@ -104,11 +110,13 @@ public class WorldItemManager : MonoBehaviour
             else if (worldItemDragging)
             {
                 worldItemDragging.rb.gravityScale = 2;
+                worldItemDragging.rb.centerOfMass = Vector2.zero;
                 worldItemDragging = null;
             }
         } else if (worldItemDragging)
         {
             worldItemDragging.rb.gravityScale = 2;
+            worldItemDragging.rb.centerOfMass = Vector2.zero;
             worldItemDragging = null;
         }
     }

@@ -53,6 +53,12 @@ public class WorldItem : MonoBehaviour
         boxCollider.enabled = true;
         rb.simulated = true;
     }
+
+    public Vector2 getLocalMousePosition()
+    {
+        return transform.InverseTransformPoint(UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+            10f)));
+    }
     
     private void Start()
     {
