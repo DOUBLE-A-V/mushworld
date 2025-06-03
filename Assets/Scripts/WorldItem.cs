@@ -69,7 +69,6 @@ public class WorldItem : MonoBehaviour
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
         
         sprite = GetComponent<SpriteRenderer>();
-        Debug.Log(sprite);
     }
 
     void OnMouseEnter()

@@ -303,7 +303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 749078207}
+  rotateSpeed: 5
+  movingSmooth: 0.9
   worldItems: []
+  worldItemDragging: {fileID: 0}
 --- !u!1 &682697461
 GameObject:
   m_ObjectHideFlags: 0

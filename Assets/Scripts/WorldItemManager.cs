@@ -9,12 +9,16 @@ using Debug = UnityEngine.Debug;
 public class WorldItemManager : MonoBehaviour
 {
     [SerializeField] private Player player;
+    [SerializeField] private float rotateSpeed;
+    [SerializeField] private float movingSmooth;
     
     public List<WorldItem> worldItems = new List<WorldItem>();
 
-    private WorldItem worldItemDragging = null;
+    public WorldItem worldItemDragging = null;
 
-    private Vector3 offset;
+    private bool leftPressed = false;
+    private int turn = 0;
+    
     public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)
     {
         Item item = new Item(itemName, size, effects, eatable);
@@ -58,7 +62,12 @@ public class WorldItemManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Input.GetMouseButton(0))
+        if (turn != 0 && worldItemDragging)
+        {
+            worldItemDragging.rb.freezeRotation = true;
+            worldItemDragging.rb.rotation += rotateSpeed * turn;
+        }
+        if (leftPressed)
         {
             if (player.ui.state == 0)
             {
@@ -70,9 +79,6 @@ public class WorldItemManager : MonoBehaviour
                         {
                             worldItemDragging = worldItem;
                             worldItemDragging.rb.gravityScale = 0;
-                            Vector2 localMousePosition = worldItemDragging.getLocalMousePosition();
-                            worldItemDragging.rb.centerOfMass = localMousePosition;
-                            offset = localMousePosition;
                             break;
                         }
                     }
@@ -81,9 +87,9 @@ public class WorldItemManager : MonoBehaviour
                 if (worldItemDragging)
                 {
                     Vector3 mouseWorldPosition = getMouseWorldPosition();
-                    Vector3 delta = mouseWorldPosition - worldItemDragging.transform.position - offset;
+                    Vector3 delta = mouseWorldPosition - worldItemDragging.transform.position;
 
-                    float coef = 0.9f;
+                    float coef = movingSmooth;
                     float distance = Vector3.Distance(worldItemDragging.transform.position, mouseWorldPosition) * 5;
                     
                     Vector3 calcForce = delta.normalized * distance;
@@ -111,18 +117,34 @@ public class WorldItemManager : MonoBehaviour
             {
                 worldItemDragging.rb.gravityScale = 2;
                 worldItemDragging.rb.centerOfMass = Vector2.zero;
+                worldItemDragging.rb.freezeRotation = false;
                 worldItemDragging = null;
             }
         } else if (worldItemDragging)
         {
             worldItemDragging.rb.gravityScale = 2;
             worldItemDragging.rb.centerOfMass = Vector2.zero;
+            worldItemDragging.rb.freezeRotation = false;
             worldItemDragging = null;
         }
     }
     
     void Update()
     {
+        leftPressed = Input.GetMouseButton(0);
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            turn = -1;
+        } else if (Input.GetKey(KeyCode.Q))
+        {
+            turn = 1;
+        }
+        else
+        {
+            turn = 0;
+        }
+        
         if (Input.GetKeyUp(KeyCode.R))
         {
             createItem(

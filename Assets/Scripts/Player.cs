@@ -303,7 +303,7 @@ public class Player : MonoBehaviour
             compareControls();
         }
         effects.updateTimers(Time.deltaTime);
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E) && !ui.worldItemManager.worldItemDragging)
         {
             toggleInventory();
         }

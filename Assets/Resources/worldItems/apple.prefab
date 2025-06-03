@@ -150,4 +150,4 @@ MonoBehaviour:
   itemName: 
   touching: 0
   size: {x: 0.32, y: 0.32}
-  rb: {fileID: 0}
+  rb: {fileID: 780518212127869774}
