@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 749078207}
-  rotateSpeed: 5
+  rotateSpeed: 3
   movingSmooth: 0.9
   worldItems: []
   worldItemDragging: {fileID: 0}
@@ -564,10 +564,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rb: {fileID: 749078206}
-  jumpForce: 50
+  jumpForce: 40
   ui: {fileID: 1555769079}
   movingSpeed: {x: 0, y: 0}
   controlsLocked: 0
+  right: 1
   health: 5
 --- !u!61 &749078208
 BoxCollider2D:
@@ -925,6 +926,7 @@ MonoBehaviour:
   inventoryTitle: {fileID: 1273573525}
   subInventoryTitle: {fileID: 141537578}
   tip: {fileID: 682697463}
+  player: {fileID: 749078207}
   worldItemManager: {fileID: 556014673}
   cellSize: 50
   state: 0

@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public Vector2 movingSpeed;
     public bool controlsLocked = false;
     private bool isGrounded = false;
-    private bool right = true;
+    public bool right = true;
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     
     public float health = 5;

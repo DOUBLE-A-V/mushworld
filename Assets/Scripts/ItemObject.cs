@@ -23,6 +23,7 @@ public class ItemObject : MonoBehaviour
     public bool dragging = false;
     public bool replaceMe = false;
     public bool replaceAnyOther = false;
+    public bool throwMeOut = false;
 
     private void Start()
     {
@@ -50,6 +51,11 @@ public class ItemObject : MonoBehaviour
             image.color = new Color(1f, 1f, 1f, 1);
         }
 
+        if (Input.GetKeyDown(KeyCode.Q) && touching)
+        {
+            throwMeOut = true;
+        }
+        
         if (Input.GetMouseButtonDown(0))
         {
             if (touching)

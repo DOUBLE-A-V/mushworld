@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
 	[SerializeField] TMP_Text inventoryTitle;
 	[SerializeField] TMP_Text subInventoryTitle;
 	[SerializeField] TMP_Text tip;
+	[SerializeField] private Player player;
 	[SerializeField] public WorldItemManager worldItemManager;
 	
 	
@@ -149,10 +150,49 @@ public class UI : MonoBehaviour
 			}
 		}
 	}
+
+	void updateThrowOutRequests(bool sub = false)
+	{
+		Inventory usingInventory;
+
+		if (sub)
+		{
+			usingInventory = subInventory;
+		}
+		else
+		{
+			usingInventory = nowInventory;
+		}
+		
+		foreach (ItemObject item in items)
+		{
+			if (item.throwMeOut)
+			{
+				if (item.sub == sub)
+				{
+					usingInventory.removeItem(item.itemID);
+					if (player.right)
+					{
+						worldItemManager.createItem(player.transform.position + new Vector3(1, 0), Item.getItem(item.itemID));	
+					}
+					else
+					{
+						worldItemManager.createItem(player.transform.position - new Vector3(1, 0), Item.getItem(item.itemID));
+					}
+					items.Remove(item);
+					Destroy(item.gameObject);
+					item.throwMeOut = false;
+					break;
+				}
+				item.throwMeOut = false;
+			}
+		}
+	}
 	void Update()
 	{
 		updateTouchingCell();
 		updateDragging();
+		updateThrowOutRequests();
 		if (Input.GetKeyUp(KeyCode.G))
 		{
 			Debug.Log("now inventory:");
@@ -165,6 +205,7 @@ public class UI : MonoBehaviour
 		{
 			updateReplaceRequests();
 			updateReplaceRequests(true);
+			updateThrowOutRequests(true);
 		}
 		else
 		{
