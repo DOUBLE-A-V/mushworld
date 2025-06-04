@@ -5,6 +5,7 @@ using System.Diagnostics;
 using UnityEngine;
 using InvManager;
 using Debug = UnityEngine.Debug;
+using Effects;
 
 public class WorldItemManager : MonoBehaviour
 {
@@ -19,9 +20,9 @@ public class WorldItemManager : MonoBehaviour
     private bool leftPressed = false;
     private int turn = 0;
     
-    public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)
+    public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false)
     {
-        Item item = new Item(itemName, size, effects, eatable);
+        Item item = new Item(itemName, size, effects, eatable, usable);
         WorldItem worldItem = Instantiate(Resources.Load<WorldItem>("worldItems/" + itemName));
         worldItem.transform.position = worldPosition;
         worldItem.id = item.id;
@@ -149,7 +150,10 @@ public class WorldItemManager : MonoBehaviour
         {
             createItem(
                 UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
-                    10f)), "apple", new Vector2(2, 2));
+                    10f)), "apple", new Vector2(2, 2), new List<int[]>()
+                {
+                    new int[3] {Effect.EFFECT_DEFENSE, 10, 20}
+                }, true);
         }
     }
 }

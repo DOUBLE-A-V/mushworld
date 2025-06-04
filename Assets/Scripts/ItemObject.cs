@@ -8,6 +8,8 @@ using DG.Tweening;
 
 public class ItemObject : MonoBehaviour
 {
+    public UI ui;
+    
     public string itemName;
     public uint itemID;
     public bool sub = false;
@@ -21,9 +23,6 @@ public class ItemObject : MonoBehaviour
     private bool pressingBlocked = false;
 	
     public bool dragging = false;
-    public bool replaceMe = false;
-    public bool replaceAnyOther = false;
-    public bool throwMeOut = false;
 
     private void Start()
     {
@@ -38,6 +37,16 @@ public class ItemObject : MonoBehaviour
     
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F) && touching)
+        {
+            ui.eatItem(this);
+        }
+        
+        if (Input.GetMouseButtonDown(1) && touching)
+        {
+            ui.throwMenuOnItem(this);
+        }
+        
         Vector2 mousePos = Input.mousePosition;
         if (mousePos.x > transform.position.x - size.x / 2 && mousePos.x < transform.position.x + size.x / 2 &&
             mousePos.y > transform.position.y - size.y / 2 && mousePos.y < transform.position.y + size.y / 2)
@@ -53,7 +62,7 @@ public class ItemObject : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q) && touching)
         {
-            throwMeOut = true;
+            ui.throwOutItem(this);
         }
         
         if (Input.GetMouseButtonDown(0))
@@ -62,16 +71,11 @@ public class ItemObject : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    replaceMe = true;
+                    ui.replaceItem(this);
                 } else if (Input.GetKey(KeyCode.LeftControl))
                 {
-                    replaceAnyOther = true;
+                    ui.replaceAnyOtherItem(this);
                 }   
-            }
-            else
-            {
-                replaceMe = false;
-                replaceAnyOther = false;
             }
         }
         

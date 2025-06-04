@@ -32,6 +32,7 @@ namespace InvManager
         public uint realItemId = 0;
         public List<int[]> effects = new List<int[]>();
         public bool eatable = false;
+        public bool usable = false;
         
         public string prefab;
 
@@ -92,6 +93,7 @@ namespace InvManager
             this.position = item.position;
             this.prefab = item.prefab;
             this.eatable = item.eatable;
+            this.usable = item.usable;
             
             allItems.Add(this);
         }
@@ -106,12 +108,13 @@ namespace InvManager
             allItems.Remove(this);
         }
         
-        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false)
+        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false)
         {
             idCounter++;
             this.id = idCounter;
             this.name = itemName;
             this.eatable = eatable;
+            this.usable = usable;
             
             if (itemsPrefabsPresets.ContainsKey(itemName))
             {

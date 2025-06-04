@@ -18,6 +18,7 @@ public class UI : MonoBehaviour
 	[SerializeField] TMP_Text tip;
 	[SerializeField] private Player player;
 	[SerializeField] public WorldItemManager worldItemManager;
+	[SerializeField] private DropDownMenu dropDownMenu;
 	
 	
 	public float cellSize = 50;
@@ -25,10 +26,10 @@ public class UI : MonoBehaviour
 	public Inventory subInventory;
 
 	List<Cell> cells = new List<Cell>();
-	List<ItemObject> items = new List<ItemObject>();
+	public List<ItemObject> items = new List<ItemObject>();
 	
 	List<Cell> subCells = new List<Cell>();
-	List<ItemObject> subItems = new List<ItemObject>();
+	public List<ItemObject> subItems = new List<ItemObject>();
 
 	public const int CLOSED = 0;
 	public const int OPENED = 1;
@@ -79,10 +80,43 @@ public class UI : MonoBehaviour
 		}
 	}
 
-	void updateReplaceRequests(bool sub = false)
+	public void replaceItem(ItemObject item)
+	{
+		if (item.sub)
+		{
+			Item invItem = Item.getItem(item.itemID);
+			if (nowInventory.addItem(invItem))
+			{
+				invItem = nowInventory.getItem(item.itemID);
+				subInventory.removeItem(item.itemID);
+				subItems.Remove(item);
+				items.Add(item);
+				item.sub = false;
+					
+				item.smoothMove(cellStartPos + invItem.position * new Vector2(1, -1) * 
+					cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
+			}
+		}
+		else
+		{
+			Item invItem = Item.getItem(item.itemID);
+			if (subInventory.addItem(invItem))
+			{
+				invItem = subInventory.getItem(item.itemID);
+				nowInventory.removeItem(item.itemID);
+				items.Remove(item);
+				subItems.Add(item);
+				item.sub = true;
+				item.smoothMove(subCellStartPos + invItem.position * new Vector2(1, -1) * 
+					cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
+			}
+		}
+	}
+
+	public void replaceAnyOtherItem(ItemObject item)
 	{
 		List<ItemObject> itemsList;
-		if (sub)
+		if (item.sub)
 		{
 			itemsList = subItems;
 		}
@@ -90,133 +124,75 @@ public class UI : MonoBehaviour
 		{
 			itemsList = items;
 		}
-		foreach (ItemObject item in itemsList)
+		
+		bool otherReplaced = false;
+		foreach (ItemObject item2 in itemsList)
 		{
-			if (item.replaceAnyOther)
+			if (item2.itemName == item.itemName && item2.itemID != item.itemID)
 			{
-				bool otherReplaced = false;
-				foreach (ItemObject item2 in itemsList)
-				{
-					if (item2.itemName == item.itemName && item2.itemID != item.itemID)
-					{
-						item2.replaceMe = true;
-						otherReplaced = true;
-						break;
-					}
-				}
-
-				if (!otherReplaced)
-				{
-					item.replaceMe = true;
-				}
-				item.replaceAnyOther = false;
-			}
-			if (item.replaceMe)
-			{
-				if (item.sub)
-				{
-					Item invItem = Item.getItem(item.itemID);
-					if (nowInventory.addItem(invItem))
-					{
-						invItem = nowInventory.getItem(item.itemID);
-						subInventory.removeItem(item.itemID);
-						subItems.Remove(item);
-						items.Add(item);
-						item.sub = false;
-					
-						item.smoothMove(cellStartPos + invItem.position * new Vector2(1, -1) * 
-							cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
-					}
-					item.replaceMe = false;
-				}
-				else
-				{
-					Item invItem = Item.getItem(item.itemID);
-					if (subInventory.addItem(invItem))
-					{
-						invItem = subInventory.getItem(item.itemID);
-						nowInventory.removeItem(item.itemID);
-						items.Remove(item);
-						subItems.Add(item);
-						item.sub = true;
-						item.smoothMove(subCellStartPos + invItem.position * new Vector2(1, -1) * 
-							cellSize + (invItem.size - new Vector2(1, 1)) * cellSize / 2 * new Vector2(1, -1), 0.5f);
-					}
-					item.replaceMe = false;
-
-				}
-
+				replaceItem(item2);
+				otherReplaced = true;
 				break;
 			}
 		}
+
+		if (!otherReplaced)
+		{
+			replaceItem(item);
+		}
 	}
 
-	void updateThrowOutRequests(bool sub = false)
+	public void throwOutItem(ItemObject item)
 	{
-		Inventory usingInventory;
-
-		if (sub)
+		if (item.sub)
 		{
-			usingInventory = subInventory;
+			subInventory.removeItem(item.itemID);	
 		}
 		else
 		{
-			usingInventory = nowInventory;
+			nowInventory.removeItem(item.itemID);
 		}
-		
-		foreach (ItemObject item in items)
+		if (player.right)
 		{
-			if (item.throwMeOut)
-			{
-				if (item.sub == sub)
-				{
-					usingInventory.removeItem(item.itemID);
-					if (player.right)
-					{
-						worldItemManager.createItem(player.transform.position + new Vector3(1, 0), Item.getItem(item.itemID));	
-					}
-					else
-					{
-						worldItemManager.createItem(player.transform.position - new Vector3(1, 0), Item.getItem(item.itemID));
-					}
-					items.Remove(item);
-					Destroy(item.gameObject);
-					item.throwMeOut = false;
-					break;
-				}
-				item.throwMeOut = false;
-			}
+			worldItemManager.createItem(player.transform.position + new Vector3(1, 0), Item.getItem(item.itemID));	
 		}
+		else
+		{
+			worldItemManager.createItem(player.transform.position - new Vector3(1, 0), Item.getItem(item.itemID));
+		}
+		items.Remove(item);
+		Destroy(item.gameObject);
+	}
+
+	public void throwMenuOnItem(ItemObject item)
+	{
+		dropDownMenu.setCurrentItem(item);
+	}
+
+	public void eatItem(ItemObject item)
+	{
+		if (item.sub)
+		{
+			subItems.Remove(item);
+		}
+		else
+		{
+			items.Remove(item);
+		}
+		Destroy(item.gameObject);
+
+		player.eatItem(Item.getItem(item.itemID));
 	}
 	void Update()
 	{
 		updateTouchingCell();
 		updateDragging();
-		updateThrowOutRequests();
 		if (Input.GetKeyUp(KeyCode.G))
 		{
 			Debug.Log("now inventory:");
 			nowInventory.printInventory();
 			Debug.Log("sub inventory:");
 			subInventory.printInventory();
-		}
-
-		if (state == SUB_OPENED)
-		{
-			updateReplaceRequests();
-			updateReplaceRequests(true);
-			updateThrowOutRequests(true);
-		}
-		else
-		{
-			foreach (ItemObject item in items)
-			{
-				item.replaceMe = false;
-			}
-			foreach (ItemObject item in subItems)
-			{
-				item.replaceMe = false;
-			}
 		}
 	}
 
@@ -475,6 +451,8 @@ public class UI : MonoBehaviour
 			{
 				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Resources.Load("items/notexture")), transform).GetComponent<ItemObject>();
 			}
+
+			itemObject.ui = this;
 
 			if (sub)
 			{

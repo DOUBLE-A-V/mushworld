@@ -59,6 +59,8 @@
     <Compile Include="Assets\Scripts\WorldItem.cs" />
     <Compile Include="Assets\Scripts\Effects.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
+    <Compile Include="Assets\Scripts\DropDownMenu.cs" />
+    <Compile Include="Assets\Scripts\ItemsUser.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
         effects.print();
     }
 
-    void eatItem(string name)
+    public void eatItem(string name)
     {
         foreach (Item item in Inventory.items)
         {
@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    void eatItem(Item item)
+    public void eatItem(Item item)
     {
         if (item.eatable)
         {
