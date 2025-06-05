@@ -19,6 +19,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private Player player;
 	[SerializeField] public WorldItemManager worldItemManager;
 	[SerializeField] private DropDownMenu dropDownMenu;
+	[SerializeField] private ItemsUser itemsUser;
 	
 	
 	public float cellSize = 50;
@@ -182,6 +183,11 @@ public class UI : MonoBehaviour
 		Destroy(item.gameObject);
 
 		player.eatItem(Item.getItem(item.itemID));
+	}
+
+	public void useItem(ItemObject item)
+	{
+		itemsUser.useItem(Item.getItem(item.itemID));
 	}
 	void Update()
 	{

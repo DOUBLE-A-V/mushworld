@@ -1,18 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InvManager;
 
 public class ItemsUser : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	[SerializeField] private Player player;
+	[SerializeField] private UI ui;
+	
+	
+	public class UsingMethod
+	{
+		public const int NONE = 0;
+		public const int TEST = 1;
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private class UsingMethods
+	{
+		static public void test()
+		{
+			Debug.Log("test using");
+		}
+	}
+	
+	public void useItem(Item item)
+	{
+		switch (item.useMethod)
+		{
+			case UsingMethod.NONE:
+				break;
+			case UsingMethod.TEST:
+				UsingMethods.test();
+				break;
+		}
+	}
 }
