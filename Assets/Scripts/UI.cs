@@ -20,21 +20,25 @@ public class UI : MonoBehaviour
 	[SerializeField] public WorldItemManager worldItemManager;
 	[SerializeField] private DropDownMenu dropDownMenu;
 	[SerializeField] private ItemsUser itemsUser;
+	[SerializeField] private GameObject inventoryUI;
 	
 	
 	public float cellSize = 50;
 	public Inventory nowInventory;
 	public Inventory subInventory;
 
+	private float inventoryOffset = 0;
+
 	List<Cell> cells = new List<Cell>();
 	public List<ItemObject> items = new List<ItemObject>();
 	
 	List<Cell> subCells = new List<Cell>();
 	public List<ItemObject> subItems = new List<ItemObject>();
-
-	public const int CLOSED = 0;
-	public const int OPENED = 1;
-	public const int SUB_OPENED = 2;
+	
+	public int CLOSED = 0;
+	public int OPENED = 1;
+	public int SUB_OPENED = 2;
+	public int USE_OPENED = 3;
 	
 	public int state = 0;
 
@@ -58,6 +62,38 @@ public class UI : MonoBehaviour
 	public void hideTakeTip()
 	{
 		tip.gameObject.SetActive(false);
+	}
+
+	public void showInventoryUI()
+	{
+		inventoryUI.SetActive(true);
+	}
+
+	public void hideInventoryUI()
+	{
+		inventoryUI.SetActive(false);
+	}
+
+	public void toggleUseInventory()
+	{
+		if (subInventory != null)
+		{
+			if (state != USE_OPENED)
+			{
+				closeSubInventory();
+				openInventory("акивные слоты", player.useInventory);
+				state = USE_OPENED;
+			}
+			else
+			{
+				closeSubInventory();
+			}
+		}
+		else
+		{
+			openInventory("акивные слоты", player.useInventory);
+			state = USE_OPENED;
+		}
 	}
 	
 	private void updateTouchingCell()
@@ -161,7 +197,15 @@ public class UI : MonoBehaviour
 		{
 			worldItemManager.createItem(player.transform.position - new Vector3(1, 0), Item.getItem(item.itemID));
 		}
-		items.Remove(item);
+
+		if (item.sub)
+		{
+			subItems.Remove(item);
+		}
+		else
+		{
+			items.Remove(item);	
+		}
 		Destroy(item.gameObject);
 	}
 
@@ -180,9 +224,31 @@ public class UI : MonoBehaviour
 		{
 			items.Remove(item);
 		}
-		Destroy(item.gameObject);
-
 		player.eatItem(Item.getItem(item.itemID));
+		Destroy(item.gameObject);
+	}
+	public void eatItem(Item item)
+	{
+		foreach (ItemObject item2 in items)
+		{
+			if (item2.itemID == item.id)
+			{
+				Destroy(item2.gameObject);
+				items.Remove(item2);
+				break;
+			}
+		}
+
+		foreach (ItemObject item2 in subItems)
+		{
+			if (item2.itemID == item.id)
+			{
+				subItems.Remove(item2);
+				items.Remove(item2);
+				break;
+			}
+		}
+		player.eatItem(item);
 	}
 
 	public void useItem(ItemObject item)
@@ -314,7 +380,35 @@ public class UI : MonoBehaviour
 			}	
 		}
 	}
-	
+
+	public void closeSubInventory()
+	{
+		foreach (Cell cell in subCells)
+		{
+			Destroy(cell.gameObject);
+		}
+		foreach (ItemObject item in subItems)
+		{
+			Destroy(item.gameObject);
+		}
+		
+		subCells.Clear();
+		subItems.Clear();
+		subInventory = null;
+		subInventoryTitle.gameObject.SetActive(false);
+		state = OPENED;
+
+		foreach (ItemObject item in items)
+		{
+			item.transform.position += new Vector3(inventoryOffset, 0);
+		}
+
+		foreach (Cell cell in cells)
+		{
+			cell.transform.position += new Vector3(inventoryOffset, 0);
+		}
+		inventoryTitle.transform.position += new Vector3(inventoryOffset, 0);
+	}
 	public void closeInventory()
 	{
 		foreach (Cell cell in cells)
@@ -352,8 +446,8 @@ public class UI : MonoBehaviour
 	}
 	public void openInventory(string title, Inventory inventory)
 	{
+		inventoryOffset = 200f;
 		Vector2 startPos;
-		float invOffset = 200f;
 		bool sub = nowInventory != null;
 		if (!sub)
 		{
@@ -366,17 +460,17 @@ public class UI : MonoBehaviour
 			
 			cellStartPos = startPos;
 			
-			invOffset = cells[0].transform.position.x - startPos.x;
+			inventoryOffset = cells[0].transform.position.x - startPos.x;
 			
 			subInventory = inventory;
 			foreach (Cell cell in cells)
 			{
-				cell.gameObject.transform.position -= new Vector3(invOffset, 0);
+				cell.gameObject.transform.position -= new Vector3(inventoryOffset, 0);
 			}
 
 			foreach (ItemObject item in items)
 			{
-				item.gameObject.transform.position -= new Vector3(invOffset, 0);
+				item.gameObject.transform.position -= new Vector3(inventoryOffset, 0);
 			}
 			state = SUB_OPENED;
 		}
@@ -390,7 +484,7 @@ public class UI : MonoBehaviour
 			startPos = new Vector2(Screen.width / 1.25f - (float)inventory.size.x / 2 * cellSize, Screen.height / 2 + (float)inventory.size.y / 2 * cellSize);
 			subCellStartPos = startPos;
 
-			inventoryTitle.transform.position -= new Vector3(invOffset, 0);
+			inventoryTitle.transform.position -= new Vector3(inventoryOffset, 0);
 			subInventoryTitle.transform.position = startPos + cellSize * new Vector2(1, 1);
 			subInventoryTitle.transform.position = new Vector2(Screen.width / 1.25f, subInventoryTitle.transform.position.y);
 		}

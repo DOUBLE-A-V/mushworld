@@ -9,6 +9,7 @@ public class DropDownMenu : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private GameObject button2;
     [SerializeField] private UI ui;
+    [SerializeField] private ItemsUser itemsUser;
 
     private bool touching = false;
     
@@ -21,10 +22,10 @@ public class DropDownMenu : MonoBehaviour
         
         if (currentItem.eatable)
         {
-            player.eatItem(currentItem);
+            ui.eatItem(currentItem);
         } else if (currentItem.usable)
         {
-            Debug.Log("no");
+            itemsUser.useItem(currentItem);
         }
         clear();
     }

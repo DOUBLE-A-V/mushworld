@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private bool isGrounded = false;
     public bool right = true;
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
+    public InventoryManager useInventory = new InventoryManager();
     
     public float health = 5;
 
@@ -290,10 +291,12 @@ public class Player : MonoBehaviour
         if (ui.state == 0)
         {
             ui.openInventory("инвентарь", Inventory);
+            ui.showInventoryUI();
         }
         else
         {
             ui.closeInventory();
+            ui.hideInventoryUI();   
         }
     }
     void Update()
