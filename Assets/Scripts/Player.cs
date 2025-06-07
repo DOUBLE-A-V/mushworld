@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     public InventoryManager useInventory = new InventoryManager();
     
+    public List<Item> itemsUsing = new List<Item>();
+    public Item usingItem = null;
+    
     public float health = 5;
 
     private const int DAMAGE_NORMAL = 0;
@@ -99,6 +102,7 @@ public class Player : MonoBehaviour
         InventoryManager subInventory = new InventoryManager();
         new Item("null");
         new Item("apple", new Vector2(1, 1));
+        
         Inventory.refactorCells(new Vector2(9, 6));
         useInventory.refactorCells(new Vector2(6, 2));
         
@@ -244,6 +248,28 @@ public class Player : MonoBehaviour
     }
     void compareControls()
     {
+        bool itemChanged = false;
+        for (int i = 0; i < 6; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                if (itemsUsing.Count > i)
+                {
+                    usingItem = itemsUsing[i];
+                    itemChanged = true;
+                    break;
+                }
+                else
+                {
+                    ui.clearUsingItemIcon();
+                }
+            }
+        }
+        if (itemChanged)
+        {
+            ui.refreshUsingItemIcon(usingItem.name);
+        }
+        
         if (Input.GetKey(KeyCode.W) ||  Input.GetKey(KeyCode.Space))
         {
             if (!pressedJump)
@@ -297,6 +323,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            ui.refreshUsingItems();
             ui.closeInventory();
             ui.hideInventoryUI();   
         }

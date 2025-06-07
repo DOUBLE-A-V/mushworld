@@ -21,6 +21,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private DropDownMenu dropDownMenu;
 	[SerializeField] private ItemsUser itemsUser;
 	[SerializeField] private GameObject inventoryUI;
+	[SerializeField] private Image usingItemIcon;
 	
 	
 	public float cellSize = 50;
@@ -74,6 +75,36 @@ public class UI : MonoBehaviour
 		inventoryUI.SetActive(false);
 	}
 
+	public void refreshUsingItemIcon(string itemName)
+	{
+		Sprite sprite = Instantiate(Resources.Load<Sprite>("sprites/" + itemName));
+		usingItemIcon.sprite = sprite;
+		usingItemIcon.gameObject.SetActive(true);
+	}
+
+	public void clearUsingItemIcon()
+	{
+		usingItemIcon.gameObject.SetActive(false);
+	}
+
+	public void refreshUsingItems()
+	{
+		player.itemsUsing.Clear();
+		foreach (List<Item> line in player.useInventory.cells)
+		{
+			foreach (Item item in line)
+			{
+				if (item != null)
+				{
+					if (item.itemPartId == 0)
+					{
+						player.itemsUsing.Add(item);
+					}	
+				}
+			}
+		}
+	}
+	
 	public void toggleUseInventory()
 	{
 		if (subInventory != null)
@@ -86,6 +117,7 @@ public class UI : MonoBehaviour
 			}
 			else
 			{
+				refreshUsingItems();
 				closeSubInventory();
 			}
 		}
@@ -259,13 +291,7 @@ public class UI : MonoBehaviour
 	{
 		updateTouchingCell();
 		updateDragging();
-		if (Input.GetKeyUp(KeyCode.G))
-		{
-			Debug.Log("now inventory:");
-			nowInventory.printInventory();
-			Debug.Log("sub inventory:");
-			subInventory.printInventory();
-		}
+		
 	}
 
 	private void updateDragging()
