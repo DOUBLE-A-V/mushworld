@@ -100,6 +100,8 @@ public class Player : MonoBehaviour
         new Item("null");
         new Item("apple", new Vector2(1, 1));
         Inventory.refactorCells(new Vector2(9, 6));
+        useInventory.refactorCells(new Vector2(6, 2));
+        
         Inventory.addItem(new Item("apple", new Vector2(5, 3), new List<int[]>()
         {
             new int[3] { 1, 15, 5 }
