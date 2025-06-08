@@ -62,7 +62,7 @@ public class ItemObject : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q) && touching)
         {
-            ui.throwOutItem(this);
+            ui.dropItem(this);
         }
         
         if (Input.GetMouseButtonDown(0))

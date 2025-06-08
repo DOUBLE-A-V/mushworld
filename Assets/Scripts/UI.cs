@@ -9,6 +9,7 @@ using Inventory = InvManager.InventoryManager;
 using Item = InvManager.Item;
 using UnityEngine.UI;
 using TipsTranslates;
+using UnityEngine.PlayerLoop;
 
 public class UI : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private ItemsUser itemsUser;
 	[SerializeField] private GameObject inventoryUI;
 	[SerializeField] private Image usingItemIcon;
+	[SerializeField] private TMP_Text usingItemNum;
 	
 	
 	public float cellSize = 50;
@@ -77,7 +79,7 @@ public class UI : MonoBehaviour
 
 	public void refreshUsingItemIcon(string itemName)
 	{
-		Sprite sprite = Instantiate(Resources.Load<Sprite>("sprites/" + itemName));
+		Sprite sprite = Instantiate(Resources.Load<Sprite>("sprites/items/" + itemName));
 		usingItemIcon.sprite = sprite;
 		usingItemIcon.gameObject.SetActive(true);
 	}
@@ -85,6 +87,7 @@ public class UI : MonoBehaviour
 	public void clearUsingItemIcon()
 	{
 		usingItemIcon.gameObject.SetActive(false);
+		usingItemNum.gameObject.SetActive(false);
 	}
 
 	public void refreshUsingItems()
@@ -99,10 +102,41 @@ public class UI : MonoBehaviour
 					if (item.itemPartId == 0)
 					{
 						player.itemsUsing.Add(item);
-					}	
+					}
 				}
 			}
 		}
+
+		int count = 0;
+		bool usingItemFound = false;
+		foreach (Item item in player.itemsUsing)
+		{
+			if (player.usingItem != null)
+			{
+				if (item.id == player.usingItem.id)
+				{
+					usingItemFound = true;
+					if (count != player.usingItemNum)
+					{
+						player.clearUsingItem();
+						clearUsingItemIcon();
+					}
+				}
+			}
+			count++;
+		}
+
+		if (!usingItemFound)
+		{
+			player.clearUsingItem();
+			clearUsingItemIcon();
+		}
+	}
+
+	public void refreshUsingItemNumText()
+	{
+		usingItemNum.gameObject.SetActive(true);
+		usingItemNum.text = (player.usingItemNum + 1).ToString();
 	}
 	
 	public void toggleUseInventory()
@@ -211,7 +245,7 @@ public class UI : MonoBehaviour
 		}
 	}
 
-	public void throwOutItem(ItemObject item)
+	public void dropItem(ItemObject item)
 	{
 		if (item.sub)
 		{

@@ -30,13 +30,13 @@ public class DropDownMenu : MonoBehaviour
         clear();
     }
 
-    public void throwOutCurrentItem()
+    public void dropCurrentItem()
     {
         foreach (ItemObject item in player.ui.items)
         {
             if (item.itemID == currentItem.id)
             {
-                ui.throwOutItem(item);
+                ui.dropItem(item);
                 clear();
                 return;
             }
@@ -46,7 +46,7 @@ public class DropDownMenu : MonoBehaviour
         {
             if (item.itemID == currentItem.id)
             {
-                ui.throwOutItem(item);
+                ui.dropItem(item);
                 clear();
                 break;
             }

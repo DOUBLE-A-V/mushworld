@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce;
     [SerializeField] public UI ui;
+
+    [SerializeField] private float usingItemMoveTime;
     
     private bool pressedJump = false;
     public Vector2 movingSpeed;
@@ -23,6 +25,14 @@ public class Player : MonoBehaviour
     public bool right = true;
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     public InventoryManager useInventory = new InventoryManager();
+    [SerializeField] GameObject usingItemObject;
+    private SpriteRenderer usingItemSprite;
+    private SpriteRenderer sprite;
+
+    public int usingItemNum = -1;
+
+    public Vector2 usingItemOffset = Vector2.zero;
+    
     
     public List<Item> itemsUsing = new List<Item>();
     public Item usingItem = null;
@@ -32,6 +42,13 @@ public class Player : MonoBehaviour
     private const int DAMAGE_NORMAL = 0;
 
     Effects.Effects effects = new Effects.Effects();
+
+    public void clearUsingItem()
+    {
+        usingItem = null;
+        usingItemObject.SetActive(false);
+        usingItemNum = -1;
+    }
     
     void updateItemsEffects()
     {
@@ -99,6 +116,9 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
+        usingItemSprite = usingItemObject.GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
+        
         InventoryManager subInventory = new InventoryManager();
         new Item("null");
         new Item("apple", new Vector2(1, 1));
@@ -246,8 +266,69 @@ public class Player : MonoBehaviour
             isGrounded = false;
         }
     }
-    void compareControls()
+
+    private void selectItem(Item item)
     {
+        int count = 0;
+        usingItemNum = -1;
+        foreach (Item item2 in itemsUsing)
+        {
+            if (item2.id == item.id)
+            {
+                usingItemNum = count;
+                break;
+            }
+            count++;
+        }
+        
+        usingItemObject.transform.position = transform.position;
+        usingItemObject.SetActive(true);
+        usingItem = item;
+        usingItemSprite.sprite = Instantiate(Resources.Load<Sprite>("sprites/items/" + item.name));
+        changeDirection(right);
+        ui.refreshUsingItemNumText();
+    }
+
+    private void changeDirection(bool isRight = true)
+    {
+        right = isRight;
+        sprite.flipX = !right;
+        usingItemSprite.flipX = !right;
+        if (right)
+        {
+            usingItemOffset = new Vector3(1, 0);
+        }
+        else
+        {
+                usingItemOffset = new Vector3(-1, 0);
+        }
+    }
+
+    public void dropUsingItem()
+    {
+        useInventory.removeItem(usingItem.id);
+        usingItemObject.SetActive(false);
+        
+        if (right)
+        {
+            ui.worldItemManager.createItem(transform.position + new Vector3(1, 0), usingItem);	
+        }
+        else
+        {
+            ui.worldItemManager.createItem(transform.position - new Vector3(1, 0), usingItem);
+        }
+        
+        clearUsingItem();
+        ui.clearUsingItemIcon();
+    }
+    
+    private void compareControls()
+    {
+        if (Input.GetKeyDown(KeyCode.Q) && ui.state == ui.CLOSED && usingItem != null)
+        {
+            dropUsingItem();
+        }
+        
         bool itemChanged = false;
         for (int i = 0; i < 6; i++)
         {
@@ -255,13 +336,14 @@ public class Player : MonoBehaviour
             {
                 if (itemsUsing.Count > i)
                 {
-                    usingItem = itemsUsing[i];
+                    selectItem(itemsUsing[i]);
                     itemChanged = true;
                     break;
                 }
                 else
                 {
                     ui.clearUsingItemIcon();
+                    usingItemObject.SetActive(false);
                 }
             }
         }
@@ -286,10 +368,18 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             movingSpeed.x = speed * -1;
+            if (right)
+            {
+                changeDirection(false);
+            }
             right = false;
         } else if (Input.GetKey(KeyCode.D))
         {
             movingSpeed.x = speed;
+            if (!right)
+            {
+                changeDirection(true);
+            }
             right = true;
         }
         else
@@ -349,6 +439,11 @@ public class Player : MonoBehaviour
         } else if (movingSpeed.x == 0)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+
+        if (usingItem != null)
+        {
+            usingItemObject.transform.position = Vector3.Lerp(usingItemObject.transform.position, transform.position + new Vector3(usingItemOffset.x, usingItemOffset.y), usingItemMoveTime);   
         }
     }
 }
