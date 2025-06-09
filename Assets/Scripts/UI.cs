@@ -20,7 +20,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private Player player;
 	[SerializeField] public WorldItemManager worldItemManager;
 	[SerializeField] private DropDownMenu dropDownMenu;
-	[SerializeField] private ItemsUser itemsUser;
+	[SerializeField] public ItemsUser itemsUser;
 	[SerializeField] private GameObject inventoryUI;
 	[SerializeField] private Image usingItemIcon;
 	[SerializeField] private TMP_Text usingItemNum;

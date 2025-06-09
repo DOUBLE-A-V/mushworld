@@ -300,7 +300,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-                usingItemOffset = new Vector3(-1, 0);
+            usingItemOffset = new Vector3(-1, 0);
         }
     }
 
@@ -321,12 +321,36 @@ public class Player : MonoBehaviour
         clearUsingItem();
         ui.clearUsingItemIcon();
     }
+
+    public void useUsingItem()
+    {
+        if (usingItem.eatable)
+        {
+            eatItem(usingItem);
+            useInventory.removeItem(usingItem.id);
+            itemsUsing.Remove(usingItem);
+            clearUsingItem();
+            ui.clearUsingItemIcon();
+        }
+        else
+        {
+            ui.itemsUser.useItem(usingItem);
+        }
+    }
     
     private void compareControls()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && ui.state == ui.CLOSED && usingItem != null)
+        if (ui.state == ui.CLOSED && usingItem != null)
         {
-            dropUsingItem();
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                dropUsingItem();
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                useUsingItem();
+            }
         }
         
         bool itemChanged = false;
