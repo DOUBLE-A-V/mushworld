@@ -16,6 +16,7 @@ public class DropDownMenu : MonoBehaviour
     private bool showed = false;
 
     private Item currentItem = null;
+    private ItemObject currentItemObject = null;
     
     public void useCurrentItem()
     {
@@ -27,6 +28,21 @@ public class DropDownMenu : MonoBehaviour
         {
             itemsUser.useItem(currentItem);
         }
+
+        if (currentItem.removeAfterUse)
+        {
+            if (currentItemObject.sub)
+            {
+                ui.subInventory.removeItem(currentItem.id);   
+            }
+            else
+            {
+                ui.nowInventory.removeItem(currentItem.id);
+            }
+        }
+
+        ui.destroyItem(currentItemObject);
+        
         clear();
     }
 
@@ -56,6 +72,7 @@ public class DropDownMenu : MonoBehaviour
     public void clear()
     {
         currentItem = null;
+        currentItemObject = null;
         gameObject.SetActive(false);
     }
 
@@ -74,7 +91,7 @@ public class DropDownMenu : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && !touching)
         {
             clear();
-        }   
+        }
     }
     public void setCurrentItem(ItemObject item)
     {
@@ -82,6 +99,7 @@ public class DropDownMenu : MonoBehaviour
         transform.SetSiblingIndex(-1);
         gameObject.SetActive(true);
         currentItem = Item.getItem(item.itemID);
+        currentItemObject = item;
         if (currentItem.eatable || currentItem.usable)
         {
             button2.SetActive(true);

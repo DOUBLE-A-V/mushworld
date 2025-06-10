@@ -293,7 +293,17 @@ public class Player : MonoBehaviour
     {
         right = isRight;
         sprite.flipX = !right;
-        usingItemSprite.flipX = !right;
+        if (usingItem != null)
+        {
+            if (!usingItem.trackMouse)
+            {
+                usingItemSprite.flipX = !right;
+            }
+            else
+            {
+                usingItemSprite.flipX = false;
+            }
+        }
         if (right)
         {
             usingItemOffset = new Vector3(1, 0);
@@ -324,17 +334,24 @@ public class Player : MonoBehaviour
 
     public void useUsingItem()
     {
+        if (usingItem.removeAfterUse)
+        {
+            useInventory.removeItem(usingItem.id);
+            itemsUsing.Remove(usingItem);
+        }
         if (usingItem.eatable)
         {
             eatItem(usingItem);
-            useInventory.removeItem(usingItem.id);
-            itemsUsing.Remove(usingItem);
-            clearUsingItem();
-            ui.clearUsingItemIcon();
         }
         else
         {
             ui.itemsUser.useItem(usingItem);
+        }
+
+        if (usingItem.removeAfterUse)
+        {
+            clearUsingItem();
+            ui.clearUsingItemIcon();
         }
     }
     
@@ -457,6 +474,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (usingItem != null)
+        {
+            if (usingItem.trackMouse)
+            {
+                usingItemObject.transform.LookAt(G.getMouseWorldPosition());
+                usingItemObject.transform.rotation = new Quaternion(0, 0, usingItemObject.transform.rotation.z, 1);
+            }
+        }
+        
         if ((movingSpeed.x > 0 && rb.velocity.x < movingSpeed.x) || (movingSpeed.x < 0 && rb.velocity.x > movingSpeed.x))
         {
             rb.velocity = new Vector2(movingSpeed.x, rb.velocity.y);

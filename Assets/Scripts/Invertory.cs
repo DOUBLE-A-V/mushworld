@@ -34,6 +34,8 @@ namespace InvManager
         public bool eatable = false;
         public bool usable = false;
         public int useMethod = 0;
+        public bool removeAfterUse = false;
+        public bool trackMouse = false;
         
         public string prefab;
 
@@ -83,6 +85,9 @@ namespace InvManager
             this.id = item.id;
             this.name = item.name;
             this.itemPartId = item.itemPartId;
+
+            this.removeAfterUse = item.removeAfterUse;
+            this.trackMouse = item.trackMouse;
             
             string itemName = item.name;
             
@@ -110,7 +115,7 @@ namespace InvManager
             allItems.Remove(this);
         }
         
-        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false, int useMethod = 0)
+        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false, int useMethod = 0, bool removeAfterUse = false, bool trackMouse = false)
         {
             idCounter++;
             this.id = idCounter;
@@ -118,6 +123,8 @@ namespace InvManager
             this.eatable = eatable;
             this.usable = usable;
             this.useMethod = useMethod;
+            this.removeAfterUse = removeAfterUse;
+            this.trackMouse = trackMouse;
             
             if (itemsPrefabsPresets.ContainsKey(itemName))
             {

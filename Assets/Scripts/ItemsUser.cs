@@ -33,5 +33,10 @@ public class ItemsUser : MonoBehaviour
 				UsingMethods.test();
 				break;
 		}
+
+		if (item.removeAfterUse)
+		{
+			Item.removeItem(item);
+		}
 	}
 }

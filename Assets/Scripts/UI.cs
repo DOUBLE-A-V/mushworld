@@ -280,6 +280,22 @@ public class UI : MonoBehaviour
 		dropDownMenu.setCurrentItem(item);
 	}
 
+	public void destroyItem(ItemObject item)
+	{
+		List<ItemObject> itemsList;
+		
+		if (item.sub)
+		{
+			items.Remove(item);
+		}
+		else
+		{
+			items.Remove(item);
+		}
+		
+		Destroy(item.gameObject);
+	}
+	
 	public void eatItem(ItemObject item)
 	{
 		if (item.sub)
