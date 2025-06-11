@@ -23,7 +23,7 @@ public class WorldItemManager : MonoBehaviour
     public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false, int useMethod = 0, bool removeAfterUse = false, bool trackMouse = false)
     {
         Item item = new Item(itemName, size, effects, eatable, usable, useMethod, removeAfterUse, trackMouse);
-        WorldItem worldItem = Instantiate(Resources.Load<WorldItem>("worldItems/" + itemName));
+        WorldItem worldItem = Instantiate(Loader.worldItems[itemName]);
         worldItem.transform.position = worldPosition;
         worldItem.id = item.id;
         worldItem.itemName = item.name;
@@ -34,7 +34,7 @@ public class WorldItemManager : MonoBehaviour
 
     public WorldItem createItem(Vector2 worldPosition, Item item)
     {
-        WorldItem worldItem = Instantiate(Resources.Load<WorldItem>("worldItems/" + item.name));
+        WorldItem worldItem = Instantiate(Loader.worldItems[item.name]);
         worldItem.transform.position = worldPosition;
         worldItem.id = item.id;
         worldItem.itemName = item.name;

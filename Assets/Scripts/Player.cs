@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
+        Loader.loadItemPrefab("apple");
         usingItemSprite = usingItemObject.GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
         

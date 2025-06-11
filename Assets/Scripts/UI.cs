@@ -54,7 +54,7 @@ public class UI : MonoBehaviour
 	private Vector2 cellStartPos;
 	private Vector2 subCellStartPos;
 	private Vector2 saveItemPos;
-
+	
 	public void showTakeTip(string itemName)
 	{
 		tip.text = Translates.translates[itemName] + "\nF чтобы подобрать";
@@ -79,7 +79,7 @@ public class UI : MonoBehaviour
 
 	public void refreshUsingItemIcon(string itemName)
 	{
-		Sprite sprite = Instantiate(Resources.Load<Sprite>("sprites/items/" + itemName));
+		Sprite sprite = Instantiate(Loader.worldItems[itemName].GetComponent<SpriteRenderer>().sprite);
 		usingItemIcon.sprite = sprite;
 		usingItemIcon.gameObject.SetActive(true);
 	}
@@ -621,11 +621,11 @@ public class UI : MonoBehaviour
 			ItemObject itemObject;
 			if (item.prefab != null)
 			{
-				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Resources.Load("items/" + item.prefab)), transform).GetComponent<ItemObject>();	
+				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Loader.itemObjects[item.name]), transform).GetComponent<ItemObject>();	
 			}
 			else
 			{
-				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Resources.Load("items/notexture")), transform).GetComponent<ItemObject>();
+				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Loader.itemObjects["notexture"]), transform).GetComponent<ItemObject>();
 			}
 
 			itemObject.ui = this;
