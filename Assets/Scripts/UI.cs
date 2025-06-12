@@ -619,14 +619,7 @@ public class UI : MonoBehaviour
 		foreach (Item item in invItems)
 		{
 			ItemObject itemObject;
-			if (item.prefab != null)
-			{
-				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Loader.itemObjects[item.name]), transform).GetComponent<ItemObject>();	
-			}
-			else
-			{
-				itemObject = Instantiate(ComponentHolderProtocol.GameObject(Loader.itemObjects["notexture"]), transform).GetComponent<ItemObject>();
-			}
+			itemObject = Instantiate(ComponentHolderProtocol.GameObject(Loader.itemObjects[item.name]), transform).GetComponent<ItemObject>();	
 
 			itemObject.ui = this;
 

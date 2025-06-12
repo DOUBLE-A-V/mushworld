@@ -3,21 +3,38 @@ using System.Collections.Generic;
 using System.Threading;
 using JetBrains.Annotations;
 using UnityEngine;
+using Effects;
+
+
 namespace InvManager
 {
     public class Item
     {
         // all items presets
-        static private Dictionary<string, string> itemsPrefabsPresets = new  Dictionary<string, string>()
+        [Serializable]
+        public class EffectPreset
         {
-            {"apple", "apple"}
-        }; 
-        static private Dictionary<string, List<string>> itemsStringDataPresets =  new Dictionary<string, List<string>>();
-        static private Dictionary<string, List<float>> itemsFloatDataPresets =  new Dictionary<string, List<float>>();
-        static private Dictionary<string, Vector2> itemsSizeDataPresets =  new Dictionary<string, Vector2>()
+            public EffectType type;
+            public int strength;
+            public int time;
+        }
+        
+        [Serializable]
+        public class ItemPresets
         {
-        };
-        static private Dictionary<string, List<int[]>> itemsEffectsDataPresets =  new Dictionary<string, List<int[]>>();
+            public string itemName;
+            public List<string> stringData;
+            public List<float> floatData;
+            public Vector2 size = Vector2.one;
+            public List<EffectPreset> effects;
+            public bool eatable;
+            public bool usable;
+            public ItemsUser.UseMethod useMethod;
+            public bool removeAfterUse;
+            public bool trackMouse;
+        }
+        
+        public static List<ItemPresets> itemsPresets = new List<ItemPresets>();
         
         static private uint idCounter = 0;
         static public List<Item> allItems = new List<Item>();
@@ -30,15 +47,12 @@ namespace InvManager
         public List<string> stringData = new List<string>();
         public List<float> floatData = new List<float>();
         public uint realItemId = 0;
-        public List<int[]> effects = new List<int[]>();
+        public List<EffectPreset> effects = new List<EffectPreset>();
         public bool eatable = false;
         public bool usable = false;
-        public int useMethod = 0;
+        public ItemsUser.UseMethod useMethod = 0;
         public bool removeAfterUse = false;
         public bool trackMouse = false;
-        
-        public string prefab;
-
         public static Item getItem(string itemName)
         {
             foreach (Item item in allItems)
@@ -97,7 +111,6 @@ namespace InvManager
             
             this.size = item.size;
             this.position = item.position;
-            this.prefab = item.prefab;
             this.eatable = item.eatable;
             this.usable = item.usable;
             this.useMethod = item.useMethod;
@@ -115,8 +128,18 @@ namespace InvManager
             allItems.Remove(this);
         }
         
-        public Item(string itemName, Vector2? size = null, List<int[]> effects = null, bool eatable = false, bool usable = false, int useMethod = 0, bool removeAfterUse = false, bool trackMouse = false)
+        public Item(string itemName, Vector2? size = null, List<EffectPreset> effects = null, bool eatable = false, bool usable = false, ItemsUser.UseMethod useMethod = 0, bool removeAfterUse = false, bool trackMouse = false)
         {
+            ItemPresets thisPresets = null;
+            foreach (ItemPresets presets in itemsPresets)
+            {
+                if (presets.itemName == itemName)
+                {
+                    thisPresets = presets;
+                    break;
+                }
+            }
+            
             idCounter++;
             this.id = idCounter;
             this.name = itemName;
@@ -125,36 +148,18 @@ namespace InvManager
             this.useMethod = useMethod;
             this.removeAfterUse = removeAfterUse;
             this.trackMouse = trackMouse;
-            
-            if (itemsPrefabsPresets.ContainsKey(itemName))
-            {
-                this.prefab = itemsPrefabsPresets[itemName];
-            }
-            
-            if (itemsStringDataPresets.ContainsKey(itemName))
-            {
-                foreach (string el in itemsStringDataPresets[itemName])
-                {
-                    this.stringData.Add(el);
-                }
-            }
 
-            if (itemsFloatDataPresets.ContainsKey(itemName))
+            if (thisPresets != null)
             {
-                foreach (float el in itemsFloatDataPresets[itemName])
-                {
-                    this.floatData.Add(el);
-                }   
-            }
-
-            if (itemsSizeDataPresets.ContainsKey(itemName))
-            {
-                this.size = itemsSizeDataPresets[itemName];
-            }
-            
-            if (itemsEffectsDataPresets.ContainsKey(itemName))
-            {
-                this.effects = itemsEffectsDataPresets[itemName];
+                this.size = thisPresets.size;
+                this.stringData = thisPresets.stringData;
+                this.floatData = thisPresets.floatData;
+                this.effects = thisPresets.effects;
+                this.eatable = thisPresets.eatable;
+                this.usable = thisPresets.usable;
+                this.useMethod = thisPresets.useMethod;
+                this.removeAfterUse = thisPresets.removeAfterUse;
+                this.trackMouse = thisPresets.trackMouse;
             }
 
             if (size != null)

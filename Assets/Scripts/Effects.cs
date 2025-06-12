@@ -6,20 +6,20 @@ using InvManager;
 
 namespace Effects
 {
-    enum EffectSource
+    public enum EffectSource
     {
         none = 0,
         item = 1
     }
+
+    public enum EffectType
+    {
+        defense = 0,
+        regeneration = 1
+    }
     class Effect
     {
-        public const int EFFECT_DEFENSE = 0;
-        public const int EFFECT_REGENERATION = 1;
-
-        public const int SOURCE_NONE = 0;
-        public const int SOURCE_ITEM = 1;
-
-        public int type;
+        public EffectType type;
         public int strength;
         public List<int> parameters;
         public EffectSource sourceType = 0;
@@ -27,7 +27,7 @@ namespace Effects
         public float timer = 0f;
         public bool haveTimer = false;
         
-        public Effect(int effectType_, int strength_, EffectSource sourceType_ = EffectSource.none, uint sourceID_ = 0, float timer_ = 0f)
+        public Effect(EffectType effectType_, int strength_, EffectSource sourceType_ = EffectSource.none, uint sourceID_ = 0, float timer_ = 0f)
         {
             this.type = effectType_;
             this.strength = strength_;
@@ -54,17 +54,9 @@ namespace Effects
         {
             return stringifyParameters(this.parameters);
         }
-        public static string stringifyType(int type)
+        public static string stringifyType(EffectType type)
         {
-            switch (type)
-            {
-                case EFFECT_DEFENSE:
-                    return "defense";
-                case EFFECT_REGENERATION:
-                    return "regeneration";
-            }
-
-            return "unknown";
+            return type.ToString();
         }
 
         public static string stringifyParameters(List<int> parameters)
@@ -146,7 +138,7 @@ namespace Effects
             }
         }
         
-        public Effect getCalcedEffect(int type)
+        public Effect getCalcedEffect(EffectType type)
         {
             foreach (Effect effect in effectsCalced)
             {
@@ -158,7 +150,7 @@ namespace Effects
             return null;
         }
 
-        public Effect getEffect(int type)
+        public Effect getEffect(EffectType type)
         {
             foreach (Effect effect in effects)
             {
@@ -170,11 +162,11 @@ namespace Effects
             return null;
         }
 
-        public Effect getEffectBySource(EffectSource effectSource, uint sourceID, int type = -1)
+        public Effect getEffectBySource(EffectSource effectSource, uint sourceID, EffectType? type = null)
         {
             foreach (Effect effect in effects)
             {
-                if (effect.sourceType == effectSource && effect.sourceID == sourceID && (effect.type == type || type == -1))
+                if (effect.sourceType == effectSource && effect.sourceID == sourceID && (type == null || effect.type == type.Value))
                 {
                     return effect;
                 }
@@ -188,7 +180,7 @@ namespace Effects
             this.calcEffects();
         }
 
-        public Effect addEffect(int type, int strength, EffectSource sourceType = EffectSource.none, uint sourceID = 0, float timer = 0f)
+        public Effect addEffect(EffectType type, int strength, EffectSource sourceType = EffectSource.none, uint sourceID = 0, float timer = 0f)
         {
             Effect effect = new Effect(type, strength, sourceType, sourceID, timer);
             this.addEffect(effect);
@@ -246,11 +238,11 @@ namespace Effects
             }
         }
         
-        public void removeEffectBySource(EffectSource effectSource, uint sourceID, int type = -1)
+        public void removeEffectBySource(EffectSource effectSource, uint sourceID, EffectType? type = null)
         {
             foreach (Effect e in this.effects)
             {
-                if (e.sourceType == effectSource && e.sourceID == sourceID && (e.type == type || type == -1))
+                if (e.sourceType == effectSource && e.sourceID == sourceID && (type == null || e.type == type))
                 {
                     this.effects.Remove(e);
                     break;
@@ -258,7 +250,7 @@ namespace Effects
             }
         }
         
-        public void removeEffect(int type)
+        public void removeEffect(EffectType type)
         {
             List<Effect> removeList = new List<Effect>();
             foreach (Effect e in this.effects)

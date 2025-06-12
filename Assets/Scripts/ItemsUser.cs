@@ -7,12 +7,12 @@ public class ItemsUser : MonoBehaviour
 {
 	[SerializeField] private Player player;
 	[SerializeField] private UI ui;
-	
-	
-	public class UsingMethod
+
+
+	public enum UseMethod
 	{
-		public const int NONE = 0;
-		public const int TEST = 1;
+		none = 0,
+		test = 1
 	}
 
 	private class UsingMethods
@@ -27,13 +27,12 @@ public class ItemsUser : MonoBehaviour
 	{
 		switch (item.useMethod)
 		{
-			case UsingMethod.NONE:
+			case UseMethod.none:
 				break;
-			case UsingMethod.TEST:
+			case UseMethod.test:
 				UsingMethods.test();
 				break;
 		}
-
 		if (item.removeAfterUse)
 		{
 			Item.removeItem(item);

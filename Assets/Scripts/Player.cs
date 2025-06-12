@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     [SerializeField] public UI ui;
 
     [SerializeField] private float usingItemMoveTime;
+
+    [SerializeField] public List<Item.ItemPresets> itemsPresets;
+    
     
     private bool pressedJump = false;
     public Vector2 movingSpeed;
@@ -55,11 +58,11 @@ public class Player : MonoBehaviour
         effects.clearItemsEffects();
         foreach (Item item in Inventory.items)
         {
-            foreach (int[] effect in item.effects)
+            foreach (Item.EffectPreset effect in item.effects)
             {
-                if (effect[2] == 0)
+                if (effect.time == 0)
                 {
-                    effects.addEffect(effect[0], effect[1], EffectSource.item, item.id);   
+                    effects.addEffect(effect.type, effect.strength, EffectSource.item, item.id);   
                 }
             }
         }
@@ -83,15 +86,15 @@ public class Player : MonoBehaviour
             List<Effect> removeList = new List<Effect>();
             List<Effect> addList = new List<Effect>();
         
-            foreach (int[] effect in item.effects)
+            foreach (Item.EffectPreset effect in item.effects)
             {
-                if (effect[2] != 0)
+                if (effect.time != 0)
                 {
-                    addList.Add(new Effect(effect[0], effect[1], EffectSource.item, item.id, effect[2]));
+                    addList.Add(new Effect(effect.type, effect.strength, EffectSource.item, item.id, effect.time));
                 }
                 else
                 {
-                    removeList.Add(effects.getEffectBySource(EffectSource.item, item.id, effect[0]));
+                    removeList.Add(effects.getEffectBySource(EffectSource.item, item.id, effect.type));
                 }
             }
 
@@ -116,6 +119,8 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
+        Item.itemsPresets = itemsPresets;
+        
         Loader.loadItemPrefab("apple");
         usingItemSprite = usingItemObject.GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
@@ -127,26 +132,14 @@ public class Player : MonoBehaviour
         Inventory.refactorCells(new Vector2(9, 6));
         useInventory.refactorCells(new Vector2(6, 2));
         
-        Inventory.addItem(new Item("apple", new Vector2(5, 3), new List<int[]>()
-        {
-            new int[3] { 1, 15, 5 }
-        }));
-        Inventory.insertItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
-        {
-            new int[3] { 1, 15, 5 }
-        }), new Vector2(5, 5));
+        Inventory.addItem(new Item("apple", new Vector2(5, 3), null));
+        Inventory.insertItem(new Item("apple", new Vector2(1, 1), null), new Vector2(5, 5));
         
         for (int i = 0; i < 9; i++)
         {
-            subInventory.addItem(new Item("apple", new Vector2(1, 1), new List<int[]>()
-            {
-                new int[3] { 1, 15, 5 }
-            }));
+            subInventory.addItem(new Item("apple", new Vector2(1, 1), null));
         }
-        subInventory.addItem(new Item("apple", new Vector2(2, 2), new List<int[]>()
-        {
-            new int[3] { 1, 15, 5 }
-        }));
+        subInventory.addItem(new Item("apple", new Vector2(2, 2), null));
         
         updateItemsEffects();
         Inventory.printInventory();
@@ -163,7 +156,7 @@ public class Player : MonoBehaviour
                 {
                     switch (effect.type)
                     {
-                        case Effect.EFFECT_DEFENSE:
+                        case EffectType.defense:
                             amount = (effect.strength / 100) * amount;
                             break;
                     }
@@ -285,7 +278,7 @@ public class Player : MonoBehaviour
         usingItemObject.transform.position = transform.position;
         usingItemObject.SetActive(true);
         usingItem = item;
-        usingItemSprite.sprite = Instantiate(Resources.Load<Sprite>("sprites/items/" + item.name));
+        usingItemSprite.sprite = Instantiate(Loader.worldItems[item.name].GetComponent<SpriteRenderer>().sprite);
         changeDirection(right);
         ui.refreshUsingItemNumText();
     }
