@@ -183,11 +183,14 @@ public class Player : MonoBehaviour
         for (int i = -4; i < 5; i++)
         {
             hit = Physics2D.Raycast(transform.position - new Vector3((float)i/10f, 1, 0), Vector2.down, 0.01f);
-            if (hit.collider)
+            if (hit.collider && !hit.collider.CompareTag("npc"))
             {
                 rb.AddForce(new Vector2(0, jumpForce));
                 jumped = true;
                 break;
+            } else if (hit.collider)
+            {
+                jumped = true;
             }
         }
         if (!jumped)
@@ -432,7 +435,7 @@ public class Player : MonoBehaviour
         }
         if (hit.collider)
         {
-            if (!hit.collider.CompareTag("worldItem"))
+            if (!hit.collider.CompareTag("worldItem") && !hit.collider.CompareTag("npc"))
             {
                 movingSpeed.x = 0;
             }

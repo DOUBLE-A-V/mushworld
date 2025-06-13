@@ -47,6 +47,7 @@
     <Compile Include="Assets\Scripts\UI.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\Scripts\Invertory.cs" />
+    <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\ItemObject.cs" />
     <Compile Include="Assets\Scripts\TipsTranslates.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModulePhysics.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Assets\Scripts\Effects.cs" />
     <Compile Include="Assets\Scripts\ItemsUser.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
-    <Compile Include="Assets\Scripts\NPC.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
