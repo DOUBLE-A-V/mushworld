@@ -966,7 +966,17 @@ MonoBehaviour:
   jumpForce: 40
   ui: {fileID: 1555769079}
   usingItemMoveTime: 0.3
-  itemsPresets: []
+  itemsPresets:
+  - itemName: apple
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 1
+    trackMouse: 0
   movingSpeed: {x: 0, y: 0}
   controlsLocked: 0
   right: 1
@@ -1790,7 +1800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2927ab6ec0584439946e8eeb161c10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   tradesList: []
 --- !u!1 &1273573523
 GameObject:

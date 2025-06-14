@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using InvManager;
 
 public class NPC : MonoBehaviour
 {
-    [SerializeField] private Player player;
+    private Player player;
     
     [SerializeField] Dictionary<string, int> buyDict = new Dictionary<string, int>();
     [SerializeField] Dictionary<string, int> sellDict = new Dictionary<string, int>();
@@ -14,9 +15,36 @@ public class NPC : MonoBehaviour
     {
         public List<string> products;
         public List<string> required;
+
+        public Trade(List<string> products, List<string> required)
+        {
+            this.products = products;
+            this.required = required;
+        }
     }
     
     [SerializeField] List<Trade> tradesList = new List<Trade>();
+
+
+    void Start()
+    {
+        player = FindFirstObjectByType<Player>();
+    }
+    
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            makeTrade(new Trade(new List<string>()
+            {
+                "apple",
+                "apple"
+            }, new List<string>()
+            {
+                "apple"
+            }));
+        }
+    }
 
     public bool checkCanTrade(Trade trade)
     {
@@ -36,7 +64,8 @@ public class NPC : MonoBehaviour
 
         foreach (KeyValuePair<string, int> product in productsAmount)
         {
-            if (player.Inventory.getItem(product.Key, product.Value).Count == 0)
+            
+            if (player.Inventory.getItem(product.Key, product.Value) == null)
             {
                 return false;
             }
@@ -59,6 +88,10 @@ public class NPC : MonoBehaviour
                 if (player.transform.position.x > transform.position.x)
                 {
                     player.ui.worldItemManager.createItem(transform.position + new Vector3(0.5f, 0), item);
+                }
+                else
+                {
+                    player.ui.worldItemManager.createItem(transform.position - new Vector3(0.5f, 0), item);
                 }
             }
         }
