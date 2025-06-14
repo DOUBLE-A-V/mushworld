@@ -175,7 +175,7 @@ public class Player : MonoBehaviour
     {
         health += amount;
     }
-
+    
     void jump()
     {
         RaycastHit2D hit;
@@ -449,7 +449,7 @@ public class Player : MonoBehaviour
             ui.openInventory("инвентарь", Inventory);
             ui.showInventoryUI();
         }
-        else
+        else if (ui.state != ui.TRADE_OPENED)
         {
             ui.refreshUsingItems();
             ui.closeInventory();

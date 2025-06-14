@@ -24,6 +24,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private GameObject inventoryUI;
 	[SerializeField] private Image usingItemIcon;
 	[SerializeField] private TMP_Text usingItemNum;
+	[SerializeField] private TradeObject tradeObjectPrefab;
 	
 	
 	public float cellSize = 50;
@@ -38,10 +39,13 @@ public class UI : MonoBehaviour
 	List<Cell> subCells = new List<Cell>();
 	public List<ItemObject> subItems = new List<ItemObject>();
 	
+	private List<TradeObject> tradeObjects = new List<TradeObject>();
+	
 	public int CLOSED = 0;
 	public int OPENED = 1;
 	public int SUB_OPENED = 2;
 	public int USE_OPENED = 3;
+	public int TRADE_OPENED = 4;
 	
 	public int state = 0;
 
@@ -55,14 +59,54 @@ public class UI : MonoBehaviour
 	private Vector2 subCellStartPos;
 	private Vector2 saveItemPos;
 	
-	public void showTakeTip(string itemName)
+	
+	public void openTradeUI(List<NPC.Trade> trades, NPC fromNPC)
 	{
-		tip.text = Translates.translates[itemName] + "\nF чтобы подобрать";
-		tip.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
+		foreach (NPC.Trade trade in trades)
+		{
+			TradeObject tradeObject = Instantiate(tradeObjectPrefab, transform);
+			tradeObject.customize(fromNPC, trade);
+			tradeObject.setPlayer(player);
+			tradeObjects.Add(tradeObject);
+		}
+
+		Vector2 pos = new Vector2(0, (float)tradeObjects.Count * 53 / 2) - new Vector2(0, 26.5f);
+		
+		foreach (TradeObject tradeObject in tradeObjects)
+		{
+			tradeObject.transform.localPosition = pos;
+			pos.y -= 56;
+		}
+		
+		state = TRADE_OPENED;
+		inventoryTitle.transform.localPosition = new Vector2(0, 280);
+		inventoryTitle.text = fromNPC.npcName;
+		inventoryTitle.gameObject.SetActive(true);
+	}
+
+	public void refreshCanTrades()
+	{
+		foreach (TradeObject tradeObject in tradeObjects)
+		{
+			tradeObject.refreshCanTrade();
+		}
+	}
+	
+	public void showInteractTip(string interactName, string tipText, bool translate = true)
+	{
+		if (translate)
+		{
+			tip.text = Translates.translates[interactName] + "\n" + tipText;	
+		}
+		else
+		{
+			tip.text = interactName + "\n" + tipText;
+		}
+		tip.transform.position = Input.mousePosition + new Vector3(0, -50, 0);
 		tip.gameObject.SetActive(true);
 	}
 
-	public void hideTakeTip()
+	public void hideInteractTip()
 	{
 		tip.gameObject.SetActive(false);
 	}
@@ -337,11 +381,29 @@ public class UI : MonoBehaviour
 	{
 		itemsUser.useItem(Item.getItem(item.itemID));
 	}
+
+	public void closeTrade()
+	{
+		foreach (TradeObject tradeObject in tradeObjects)
+		{
+			Destroy(tradeObject.gameObject);
+		}
+		tradeObjects.Clear();
+		state = CLOSED;
+		inventoryTitle.gameObject.SetActive(false);
+	}
+	
 	void Update()
 	{
 		updateTouchingCell();
 		updateDragging();
-		
+		if (Input.GetKeyUp(KeyCode.E))
+		{
+			if (state == TRADE_OPENED)
+			{
+				closeTrade();
+			}
+		}
 	}
 
 	private void updateDragging()

@@ -8,6 +8,9 @@ public class NPC : MonoBehaviour
 {
     private Player player;
     
+    private bool touching = false;
+    [SerializeField] public string npcName;
+    
     [SerializeField] Dictionary<string, int> buyDict = new Dictionary<string, int>();
     [SerializeField] Dictionary<string, int> sellDict = new Dictionary<string, int>();
     [System.Serializable]
@@ -25,7 +28,6 @@ public class NPC : MonoBehaviour
     
     [SerializeField] List<Trade> tradesList = new List<Trade>();
 
-
     void Start()
     {
         player = FindFirstObjectByType<Player>();
@@ -33,16 +35,17 @@ public class NPC : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.H))
+        if (touching && player.ui.state == player.ui.CLOSED)
         {
-            makeTrade(new Trade(new List<string>()
+            player.ui.showInteractTip(npcName, "F чтобы взаимодействовать", false);
+            if (Input.GetKeyUp(KeyCode.F))
             {
-                "apple",
-                "apple"
-            }, new List<string>()
-            {
-                "apple"
-            }));
+                player.ui.openTradeUI(tradesList, this);
+            }
+        }
+        else
+        {
+            player.ui.hideInteractTip();
         }
     }
 
@@ -73,7 +76,18 @@ public class NPC : MonoBehaviour
 
         return true;
     }
+
+    private void OnMouseEnter()
+    {
+        touching = true;
+    }
+
+    private void OnMouseExit()
+    {
+        touching = false;
+    }
     
+
     public void makeTrade(Trade trade)
     {
         if (checkCanTrade(trade))

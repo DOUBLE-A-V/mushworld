@@ -114,12 +114,12 @@ public class WorldItem : MonoBehaviour
         {
             if (touching)
             {
-                ui.showTakeTip(itemName);
+                ui.showInteractTip(itemName, "F чтобы подобрать");
                 tipShowed = true;
             }
             else if (tipShowed)
             {
-                ui.hideTakeTip();
+                ui.hideInteractTip();
                 tipShowed = false;
             }
         }
@@ -131,7 +131,7 @@ public class WorldItem : MonoBehaviour
                 if (player.Inventory.addItem(Item.getItem(id)))
                 {
                     ui.worldItemManager.worldItems.Remove(this);
-                    ui.hideTakeTip();
+                    ui.hideInteractTip();
                     Destroy(gameObject);
                 }
             }
