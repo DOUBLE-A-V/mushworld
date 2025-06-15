@@ -11,8 +11,6 @@ public class NPC : MonoBehaviour
     private bool touching = false;
     [SerializeField] public string npcName;
     
-    [SerializeField] Dictionary<string, int> buyDict = new Dictionary<string, int>();
-    [SerializeField] Dictionary<string, int> sellDict = new Dictionary<string, int>();
     [System.Serializable]
     public class Trade
     {
@@ -26,7 +24,7 @@ public class NPC : MonoBehaviour
         }
     }
     
-    [SerializeField] List<Trade> tradesList = new List<Trade>();
+    [SerializeField] public List<Trade> tradesList = new List<Trade>();
 
     void Start()
     {

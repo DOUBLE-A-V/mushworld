@@ -29,6 +29,7 @@ public class WorldItemManager : MonoBehaviour
         worldItem.itemName = item.name;
         worldItem.changeSize(item.size);
         worldItems.Add(worldItem);
+        Loader.islandWorldItems.Add(worldItem);
         return worldItem;
     }
 

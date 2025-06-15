@@ -180,7 +180,7 @@ public class Player : MonoBehaviour
     {
         RaycastHit2D hit;
         bool jumped = false;
-        for (int i = -4; i < 5; i++)
+        for (int i = -3; i < 4; i++)
         {
             hit = Physics2D.Raycast(transform.position - new Vector3((float)i/10f, 1, 0), Vector2.down, 0.01f);
             if (hit.collider && !hit.collider.CompareTag("npc"))
@@ -424,22 +424,6 @@ public class Player : MonoBehaviour
         {
             movingSpeed.x = 0;
         }
-
-        RaycastHit2D hit = new RaycastHit2D();
-        if (Input.GetKey(KeyCode.A))
-        {
-            hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, -0.5f, 0), Vector2.left, 0.0001f);
-        } else if (Input.GetKey(KeyCode.D))
-        {
-            hit  = Physics2D.Raycast(transform.position + new Vector3(0.4f, -0.5f, 0), Vector2.right, 0.0001f);
-        }
-        if (hit.collider)
-        {
-            if (!hit.collider.CompareTag("worldItem") && !hit.collider.CompareTag("npc"))
-            {
-                movingSpeed.x = 0;
-            }
-        }
     }
 
     public void toggleInventory()
@@ -453,7 +437,7 @@ public class Player : MonoBehaviour
         {
             ui.refreshUsingItems();
             ui.closeInventory();
-            ui.hideInventoryUI();   
+            ui.hideInventoryUI();
         }
     }
     void Update()
