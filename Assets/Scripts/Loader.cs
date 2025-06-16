@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.NetworkInformation;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 public class Loader : MonoBehaviour
 {
@@ -17,21 +21,55 @@ public class Loader : MonoBehaviour
 	private static string workDir = System.IO.Directory.GetCurrentDirectory();
 	[SerializeField] private WorldItemManager worldItemManager;
 
+	private GameObject islandObject = null;
+
+	private IslandGenParams currentIslandGenParams = null;
+	
 	[Serializable]
-	private class itemGenParams
+	public class ItemGenParams
 	{
-		public string itemName;
-		public List<IslandType> islandsForGen;
+		public string name;
+		public List<GenTag> genTags;
+	}
+
+	[Serializable]
+	public class IslandGenParams
+	{
+		public IslandType islandType;
+		public List<GenTag> genTags;
 	}
 	
-	[SerializeField] private List<itemGenParams> itemsGenParams;
+	[SerializeField] private List<ItemGenParams> itemsGenParams;
+	[SerializeField] private List<IslandGenParams> islandsGenParams;
+	public enum GenTag
+	{
+		none = 0,
+		wood = 1,
+		stone = 2,
+	}
+
 	public enum IslandType
 	{
-		none = 0
+		none = 0,
+		first = 1
 	}
 	
 	public static int islandNum = -1;
 	public IslandType islandType = IslandType.none;
+
+	public void nextIsland()
+	{
+		islandNum++;
+		if (System.IO.File.Exists(workDir + "/" + islandNum))
+		{
+			clearCurrentIsland();
+			loadIsland(islandNum);
+		}
+		else
+		{
+			genIsland();
+		}
+	}
 	
 	public static void loadItemPrefab(string itemName)
 	{
@@ -54,12 +92,124 @@ public class Loader : MonoBehaviour
 		npcs[npcName] = Resources.Load<NPC>("npcs/" + npcName);
 	}
 
-	public static void createNPC(string npcName, bool generateTrades = false, IslandType islandType = IslandType.none)
+	public NPC createNPC(string npcName, bool generateTrades = false)
 	{
+		if (!npcs.ContainsKey(npcName))
+		{
+			loadNPCPrefab(npcName);
+		}
 		
+		NPC npc = Instantiate<NPC>(npcs[npcName]);
+		if (generateTrades)
+		{
+			npc.genTrades(itemsGenParams, currentIslandGenParams);
+		}
+		islandNPCs.Add(npc);
+		return npc;
+	}
+
+	public void genIsland()
+	{
+		clearCurrentIsland();
+		
+		List<IslandType> islandTypes = Enum.GetValues(typeof(IslandType)).Cast<IslandType>().ToList();
+		
+		islandType = islandTypes[Random.Range(0, islandTypes.Count-1)];
+		
+		islandObject = Instantiate(Resources.Load<GameObject>("islands/" + islandType.ToString()));
+
+		foreach (IslandGenParams genParams in islandsGenParams)
+		{
+			if (genParams.islandType == islandType)
+			{
+				currentIslandGenParams = genParams;
+			}
+		}
+
+		int targetRandomAdd = Random.Range(1, 4);
+		
+		int randomAdded = 0;
+
+		int counter = 0;
+		/*
+		while (randomAdded != targetRandomAdd && counter < 128)
+		{
+			GenTag genTag;
+			genTag = (GenTag)Random.Range(0, Enum.GetValues(typeof(GenTag)).Cast<GenTag>().ToList().Count);
+			if (!currentIslandGenParams.genTags.Contains(genTag))
+			{
+				currentIslandGenParams.genTags.Add(genTag);
+				randomAdded++;
+			}
+
+			counter++;
+		}
+		*/
+		Debug.Log("random tags added");
+
+		for (int i = 0; i < Random.Range(1, 4); i++)
+		{
+			genNPC();
+		}
+		Debug.Log("npc generated");
+		
+		saveCurrentIsland();
+	}
+
+	private void genNPC()
+	{
+		List<NPC> allNPCs = new List<NPC>(Resources.FindObjectsOfTypeAll<NPC>());
+		
+		NPC npc = createNPC(allNPCs[Random.Range(0, allNPCs.Count-1)].npcName, true);
+
+		Sprite sprite = islandObject.GetComponent<SpriteRenderer>().sprite;
+
+		Vector2 rect = new Vector2(sprite.rect.width/100, sprite.rect.height/100);
+		
+		npc.transform.position = new Vector2(Random.Range(rect.x / -2 + 2, rect.x / 2 - 2), rect.y/2);
+		RaycastHit2D hit;
+		sprite = npc.GetComponent<SpriteRenderer>().sprite;
+		rect = new Vector2(sprite.rect.width/100, sprite.rect.height/100);
+		int wasState = 0;
+		hit = Physics2D.Raycast(transform.position - new Vector3(0, rect.y), Vector2.down, 0.01f);
+		if (hit.collider && hit.collider.CompareTag("world"))
+		{
+			wasState = 0;
+		} else if (!hit.collider)
+		{
+			wasState = 1;
+		}
+
+		int counter = 0;
+		while (counter < 4096)
+		{
+			hit = Physics2D.Raycast(transform.position - new Vector3(0, rect.y), Vector2.down, 0.01f);
+			if (hit.collider && hit.collider.CompareTag("world"))
+			{
+				if (wasState == 0)
+				{
+					transform.position += new Vector3(0, 0.1f);
+				}
+				else
+				{
+					break;
+				}
+			} else if (!hit.collider)
+			{
+				if (wasState == 1)
+				{
+					transform.position -= new Vector3(0, 0.1f);
+				}
+				else
+				{
+					break;
+				}
+			}
+			counter++;
+		}
 	}
 	
-	public static void clearCurrentIsland()
+	public void clearCurrentIsland()
 	{
 		foreach (NPC npc in islandNPCs)
 		{
@@ -79,6 +229,10 @@ public class Loader : MonoBehaviour
 		worldItems.Clear();
 		itemObjects.Clear();
 		npcs.Clear();
+
+		Destroy(islandObject);
+		islandObject = null;
+		currentIslandGenParams = null;
 	}
 	
 	public static void loadNPC(string npcData)
@@ -213,6 +367,12 @@ public class Loader : MonoBehaviour
 			Debug.Log("loading island");
 			clearCurrentIsland();
 			loadIsland(1);
+		}
+
+		if (Input.GetKeyDown(KeyCode.J))
+		{
+			Debug.Log("next island");
+			nextIsland();
 		}
 	}
 
