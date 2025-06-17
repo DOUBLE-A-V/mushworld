@@ -183,12 +183,12 @@ public class Loader : MonoBehaviour
 		int counter = 0;
 		while (counter < 4096)
 		{
-			hit = Physics2D.Raycast(transform.position - new Vector3(0, rect.y), Vector2.down, 0.01f);
+			hit = Physics2D.Raycast(npc.transform.position - new Vector3(0, rect.y/2), Vector2.down, 0.01f);
 			if (hit.collider && hit.collider.CompareTag("world"))
 			{
 				if (wasState == 0)
 				{
-					transform.position += new Vector3(0, 0.1f);
+					npc.transform.position += new Vector3(0, 0.1f);
 				}
 				else
 				{
@@ -198,7 +198,7 @@ public class Loader : MonoBehaviour
 			{
 				if (wasState == 1)
 				{
-					transform.position -= new Vector3(0, 0.1f);
+					npc.transform.position -= new Vector3(0, 0.1f);
 				}
 				else
 				{
@@ -206,6 +206,24 @@ public class Loader : MonoBehaviour
 				}
 			}
 			counter++;
+		}
+		foreach (NPC.Trade trade in npc.tradesList)
+		{
+			foreach (string item in trade.required)
+			{
+				if (!worldItems.ContainsKey(item))
+				{
+					loadItemPrefab(item);
+				}
+			}
+
+			foreach (string product in trade.products)
+			{
+				if (!worldItems.ContainsKey(product))
+				{
+					loadItemPrefab(product);
+				}
+			}
 		}
 	}
 	
@@ -256,6 +274,21 @@ public class Loader : MonoBehaviour
 			{
 				List<string> products = new List<string>(splitData[count + 1].Split(";", StringSplitOptions.RemoveEmptyEntries));
 				List<string> required = new List<string>(splitData[count + 2].Split(";", StringSplitOptions.RemoveEmptyEntries));
+				foreach (string product in products)
+				{
+					if (!worldItems.ContainsKey(product))
+					{
+						loadItemPrefab(product);
+					}
+				}
+
+				foreach (string item in required)
+				{
+					if (!worldItems.ContainsKey(item))
+					{
+						loadItemPrefab(item);
+					}
+				}
 				npc.tradesList.Add(new NPC.Trade(products, required));
 			}
 			else if (line == ":position")

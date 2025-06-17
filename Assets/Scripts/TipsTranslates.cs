@@ -8,7 +8,8 @@ namespace TipsTranslates
 	{
 		public static Dictionary<string, string> translates = new Dictionary<string, string>()
 		{
-			{"apple", "яблоко"}
+			{"apple", "яблоко"},
+			{"plank", "доска"}
 		};	
 	}
 }

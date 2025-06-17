@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using InvManager;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 public class NPC : MonoBehaviour
@@ -55,7 +56,7 @@ public class NPC : MonoBehaviour
                     }
                 }
 
-                if (!canbe && Random.Range(0, 3) == 1)
+                if (!canbe && Random.Range(0, 2) == 1)
                 {
                     productGenParams = itemGenParams;
                     break;
@@ -64,7 +65,7 @@ public class NPC : MonoBehaviour
 
             counter++;
         }
-        if (productGenParams != null && needGenTags.Count < (int)(productGenParams.genTags.Count / 2))
+        if (productGenParams != null)
         {
             trade.products.Add(productGenParams.name);
             int first = Random.Range(0, needGenTags.Count);
