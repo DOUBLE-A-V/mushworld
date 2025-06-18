@@ -153,5 +153,13 @@ public class WorldItemManager : MonoBehaviour
                 UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
                     10f)), "apple", new Vector2(2, 2), null, true, false, ItemsUser.UseMethod.none, true, true);
         }
+
+        foreach (WorldItem item in worldItems)
+        {
+            if (item.transform.position.y < -20)
+            {
+                removeItem(item.id);
+            }
+        }
     }
 }

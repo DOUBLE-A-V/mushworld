@@ -987,6 +987,7 @@ MonoBehaviour:
     useMethod: 0
     removeAfterUse: 0
     trackMouse: 0
+  cam: {fileID: 1310785500}
   movingSpeed: {x: 0, y: 0}
   controlsLocked: 0
   right: 1
@@ -1050,6 +1051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldItemManager: {fileID: 556014673}
+  islandObject: {fileID: 0}
   itemsGenParams:
   - name: apple
     genTags: 0000000001000000
@@ -2053,6 +2055,7 @@ MonoBehaviour:
   usingItemIcon: {fileID: 1150432272}
   usingItemNum: {fileID: 1093180784}
   tradeObjectPrefab: {fileID: 572062732349013541, guid: 58340dbb78aa39f49bdfb77a0ffb52c1, type: 3}
+  loader: {fileID: 875798429}
   cellSize: 50
   items: []
   subItems: []

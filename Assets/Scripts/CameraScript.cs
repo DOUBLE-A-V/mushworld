@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
 
-public class Camera : MonoBehaviour
+public class CameraScript : MonoBehaviour
 {
     public bool followPlayer = true;
     [SerializeField] GameObject player;

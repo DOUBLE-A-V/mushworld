@@ -21,7 +21,7 @@ public class Loader : MonoBehaviour
 	private static string workDir = System.IO.Directory.GetCurrentDirectory();
 	[SerializeField] private WorldItemManager worldItemManager;
 
-	private GameObject islandObject = null;
+	public GameObject islandObject = null;
 
 	private IslandGenParams currentIslandGenParams = null;
 	
@@ -54,21 +54,23 @@ public class Loader : MonoBehaviour
 		first = 1
 	}
 	
-	public static int islandNum = -1;
+	public int islandNum = 0;
 	public IslandType islandType = IslandType.none;
 
 	public void nextIsland()
 	{
-		islandNum++;
-		if (System.IO.File.Exists(workDir + "/" + islandNum))
+		if (System.IO.Directory.Exists(workDir + "/islands/" + (islandNum + 1)))
 		{
+			saveCurrentIsland();
 			clearCurrentIsland();
-			loadIsland(islandNum);
+			loadIsland(islandNum+1);
 		}
 		else
 		{
+			saveCurrentIsland();
 			genIsland();
 		}
+		islandNum++;
 	}
 	
 	public static void loadItemPrefab(string itemName)
@@ -338,7 +340,7 @@ public class Loader : MonoBehaviour
 			data = npc.npcName;
 			foreach (NPC.Trade trade in npc.tradesList)
 			{
-				data += "\n:trade";
+				data += "\n:trade\n";
 				string temp = "";
 				foreach (string product in trade.products)
 				{
@@ -372,6 +374,7 @@ public class Loader : MonoBehaviour
 			
 			count++;
 		}
+		System.IO.File.WriteAllText(islandDir + "/data", islandType.ToString());
 	}
 	
 	public static void freeNPCPrefab(string npcName)
@@ -422,5 +425,6 @@ public class Loader : MonoBehaviour
 		{
 			loadItem(System.IO.File.ReadAllText(file));
 		}
+		islandObject = Instantiate(Resources.Load("islands/" + System.IO.File.ReadAllText(islandDir + "/data")) as GameObject);
 	}
 }

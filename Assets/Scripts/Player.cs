@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float usingItemMoveTime;
 
     [SerializeField] public List<Item.ItemPresets> itemsPresets;
+    [SerializeField] private CameraScript cam;
     
     
     private bool pressedJump = false;
@@ -44,6 +45,8 @@ public class Player : MonoBehaviour
 
     private const int DAMAGE_NORMAL = 0;
 
+    private bool requestEnableCam = false;
+    
     Effects.Effects effects = new Effects.Effects();
 
     public void clearUsingItem()
@@ -145,6 +148,8 @@ public class Player : MonoBehaviour
         Inventory.printInventory();
         ui.openInventory("fuck", Inventory);
         ui.openInventory("fuck 2", subInventory);
+        
+        cam = Camera.main.GetComponent<CameraScript>();
     }
 
     public float affectDamage(int type, int amount)
@@ -180,6 +185,7 @@ public class Player : MonoBehaviour
     {
         RaycastHit2D hit;
         bool jumped = false;
+        bool wasNPC = false;
         for (int i = -3; i < 4; i++)
         {
             hit = Physics2D.Raycast(transform.position - new Vector3((float)i/10f, 1, 0), Vector2.down, 0.01f);
@@ -190,10 +196,10 @@ public class Player : MonoBehaviour
                 break;
             } else if (hit.collider)
             {
-                jumped = true;
+                wasNPC = true;
             }
         }
-        if (!jumped)
+        if (!jumped || wasNPC)
         {
             if (right)
             {
@@ -451,8 +457,32 @@ public class Player : MonoBehaviour
         {
             toggleInventory();
         }
+
+        if (transform.position.y < -20)
+        {
+            transform.position = Vector2.zero;
+            nextIsland();
+        }
+
+        if (requestEnableCam && rb.velocity.y == 0)
+        {
+            requestEnableCam = false;
+            cam.followPlayer = true;
+        }
     }
 
+    private void nextIsland()
+    {
+        ui.loader.nextIsland();
+        Debug.Log(ui.loader.islandObject);
+        Sprite sprite = ui.loader.islandObject.GetComponent<SpriteRenderer>().sprite;
+        transform.position = new Vector2((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 10);
+        Camera.main.transform.position = new Vector3((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 0, -10);
+        rb.velocity = new Vector2(0, 0.1f);
+        Camera.main.gameObject.GetComponent<CameraScript>().followPlayer = false;
+        requestEnableCam = true;
+    }
+    
     private void FixedUpdate()
     {
         if (usingItem != null)

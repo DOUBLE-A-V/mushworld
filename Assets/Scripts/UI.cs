@@ -25,6 +25,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private Image usingItemIcon;
 	[SerializeField] private TMP_Text usingItemNum;
 	[SerializeField] private TradeObject tradeObjectPrefab;
+	[SerializeField] public Loader loader;
 	
 	
 	public float cellSize = 50;

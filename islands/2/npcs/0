@@ -1,13 +1,7 @@
 npc
 :trade
-plank;
-apple;
-:trade
 apple;
 plank;
-:trade
-plank;
-apple;
 :trade
 apple;
 plank;
@@ -17,6 +11,12 @@ plank;
 :trade
 plank;
 apple;
+:trade
+apple;
+plank;
+:trade
+apple;
+plank;
 :trade
 apple;
 plank;
@@ -27,4 +27,4 @@ plank;
 plank;
 apple;
 :position
-4,481457;-1,299995
+4,736402;-1,299995
