@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using DG.Tweening;
 using UnityEngine;
 using InvManager;
 using Debug = UnityEngine.Debug;
@@ -29,7 +30,6 @@ public class WorldItemManager : MonoBehaviour
         worldItem.itemName = item.name;
         worldItem.changeSize(item.size);
         worldItems.Add(worldItem);
-        Loader.islandWorldItems.Add(worldItem);
         return worldItem;
     }
 
@@ -161,5 +161,24 @@ public class WorldItemManager : MonoBehaviour
                 removeItem(item.id);
             }
         }
+        
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.P))
+        {
+            makePrebuildFile();
+        }
+    }
+
+    private void makePrebuildFile()
+    {
+        string prebuildData = "";
+        string itemData;
+        
+        foreach (WorldItem worldItem in worldItems)
+        {
+            itemData = worldItem.itemName + ";" + worldItem.transform.position.x + ";" + worldItem.transform.position.y + ";" + worldItem.rb.rotation;
+            prebuildData += itemData + "\n";
+        }
+        
+        System.IO.File.WriteAllText(Loader.workDir + "/prebuildData.pbd", prebuildData);
     }
 }

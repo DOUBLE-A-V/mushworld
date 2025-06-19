@@ -86,7 +86,7 @@ public class WorldItem : MonoBehaviour
         frameCount++;
         if (frameCount == 10)
         {
-            if (Math.Abs(transform.position.x - player.transform.position.x) > 12.5)
+            if (Vector2.Distance(transform.position, player.transform.position) > 15)
             {
                 visible = false;
             }
@@ -94,6 +94,7 @@ public class WorldItem : MonoBehaviour
             {
                 visible = true;
             }
+            frameCount = 0;
         }
         if (!visible)
         {

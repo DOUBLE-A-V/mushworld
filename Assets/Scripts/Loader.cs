@@ -16,9 +16,8 @@ public class Loader : MonoBehaviour
 	private static Dictionary<string, NPC> npcs = new Dictionary<string, NPC>();
 	
 	public static List<NPC> islandNPCs = new List<NPC>();
-	public static List<WorldItem> islandWorldItems = new List<WorldItem>();
 
-	private static string workDir = System.IO.Directory.GetCurrentDirectory();
+	public static string workDir = System.IO.Directory.GetCurrentDirectory();
 	[SerializeField] private WorldItemManager worldItemManager;
 
 	public GameObject islandObject = null;
@@ -133,7 +132,6 @@ public class Loader : MonoBehaviour
 		int randomAdded = 0;
 
 		int counter = 0;
-		/*
 		while (randomAdded != targetRandomAdd && counter < 128)
 		{
 			GenTag genTag;
@@ -146,7 +144,6 @@ public class Loader : MonoBehaviour
 
 			counter++;
 		}
-		*/
 		Debug.Log("random tags added");
 
 		for (int i = 0; i < Random.Range(1, 4); i++)
@@ -154,6 +151,8 @@ public class Loader : MonoBehaviour
 			genNPC();
 		}
 		Debug.Log("npc generated");
+
+		loadPrebuildData();
 		
 		saveCurrentIsland();
 	}
@@ -236,11 +235,11 @@ public class Loader : MonoBehaviour
 			Destroy(npc.gameObject);
 		}
 		islandNPCs.Clear();
-		foreach (WorldItem worldItem in islandWorldItems)
+		foreach (WorldItem worldItem in worldItemManager.worldItems)
 		{
 			Destroy(worldItem.gameObject);
 		}
-		islandWorldItems.Clear();
+		worldItemManager.worldItems.Clear();
 
 		foreach (string key in worldItems.Keys)
 		{
@@ -363,7 +362,7 @@ public class Loader : MonoBehaviour
 		}
 
 		count = 0;
-		foreach (WorldItem worldItem in islandWorldItems)
+		foreach (WorldItem worldItem in worldItemManager.worldItems)
 		{
 			data = worldItem.itemName;
 			data += "\n";
@@ -412,6 +411,22 @@ public class Loader : MonoBehaviour
 		}
 	}
 
+	void loadPrebuildData()
+	{
+		List<string> prebuildItems = System.IO.File.ReadAllLines(workDir + "/prebuilds/" + islandType + ".pbd").ToList();
+		
+		foreach (string item in prebuildItems)
+		{
+			List<string> splitData = new List<string>(item.Split(";", StringSplitOptions.RemoveEmptyEntries));
+			if (!worldItems.ContainsKey(splitData[0]))
+			{
+				loadItemPrefab(splitData[0]);
+			}
+			Vector2 pos = new Vector2(float.Parse(splitData[1].Replace(".", ",")), float.Parse(splitData[2].Replace(".", ",")));
+			worldItemManager.createItem(pos, splitData[0]).transform.rotation = Quaternion.Euler(0, 0, float.Parse(splitData[3].Replace(".", ",")));
+		}
+	}
+	
 	void loadIsland(int num)
 	{
 		string islandDir = workDir + "/islands/" + num.ToString();
