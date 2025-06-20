@@ -26,6 +26,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private TMP_Text usingItemNum;
 	[SerializeField] private TradeObject tradeObjectPrefab;
 	[SerializeField] public Loader loader;
+	[SerializeField] public TMP_InputField commandLine;
 	
 	
 	public float cellSize = 50;
@@ -60,6 +61,8 @@ public class UI : MonoBehaviour
 	private Vector2 subCellStartPos;
 	private Vector2 saveItemPos;
 	
+	private List<string> commandsHistory = new List<string>();
+	private int commandsHistoryIndex = 0;
 	
 	public void openTradeUI(List<NPC.Trade> trades, NPC fromNPC)
 	{
@@ -404,6 +407,96 @@ public class UI : MonoBehaviour
 			{
 				closeTrade();
 			}
+		}
+
+		if (commandLine.gameObject.activeInHierarchy)
+		{
+			if (Input.GetKeyDown(KeyCode.DownArrow))
+			{
+				if (commandsHistoryIndex != -1 && commandsHistoryIndex < commandsHistory.Count-1)
+				{
+					commandsHistoryIndex++;
+					commandLine.text = commandsHistory[commandsHistoryIndex];
+				}
+			} else if (Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				if (commandsHistoryIndex == -1)
+				{
+					commandsHistoryIndex = commandsHistory.Count - 1;
+				}
+				else if (commandsHistoryIndex > 0)
+				{
+					commandsHistoryIndex--;
+				}
+				
+				commandLine.text = commandsHistory[commandsHistoryIndex];
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			closeCommandLine();
+		}
+
+		if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.L))
+		{
+			showCommandLine();
+		}
+	}
+
+	private void closeCommandLine()
+	{
+		commandLine.gameObject.SetActive(false);
+		commandLine.enabled = false;
+		commandsHistoryIndex = -1;
+		commandLine.text = "";
+	}
+
+	private void showCommandLine()
+	{
+		commandLine.enabled = true;
+		commandLine.gameObject.SetActive(true);
+		commandLine.Select();
+		commandLine.ActivateInputField();
+	}
+
+	public void completeCurrentCommand()
+	{
+		commandLine.enabled = false;
+		commandLine.gameObject.SetActive(false);
+		completeCommand(commandLine.text);
+		commandsHistory.Add(commandLine.text);
+		commandsHistoryIndex = -1;
+		if (commandsHistory.Count > 10)
+		{
+			commandsHistory.RemoveAt(0);
+		}
+		commandLine.text = "";
+	}
+	
+	private void completeCommand(string command)
+	{
+		List<string> cmdSep = new List<string>(command.Split(' '));
+		switch (cmdSep[0])
+		{
+			case "createItem":
+				if (!Loader.worldItems.ContainsKey(cmdSep[1]))
+				{
+					Loader.loadItemPrefab(cmdSep[1]);
+				}
+				if (player.right)
+				{
+					worldItemManager.createItem(player.transform.position + new Vector3(0.5f, 0, 0), cmdSep[1]);	
+				}
+				else
+				{
+					worldItemManager.createItem(player.transform.position - new Vector3(0.5f, 0, 0), cmdSep[1]);
+				}
+
+				break;
+			case "makePrebuildFile":
+				worldItemManager.makePrebuildFile();
+				break;
 		}
 	}
 

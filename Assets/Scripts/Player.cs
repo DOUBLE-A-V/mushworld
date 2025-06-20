@@ -360,6 +360,10 @@ public class Player : MonoBehaviour
     
     private void compareControls()
     {
+        if (Input.GetKeyUp(KeyCode.E) && !ui.worldItemManager.worldItemDragging)
+        {
+            toggleInventory();
+        }
         if (ui.state == ui.CLOSED && usingItem != null)
         {
             if (Input.GetKeyDown(KeyCode.Q))
@@ -448,15 +452,11 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        if (!controlsLocked)
+        if (!controlsLocked && !ui.commandLine.gameObject.activeInHierarchy)
         {
             compareControls();
         }
         effects.updateTimers(Time.deltaTime);
-        if (Input.GetKeyUp(KeyCode.E) && !ui.worldItemManager.worldItemDragging)
-        {
-            toggleInventory();
-        }
 
         if (transform.position.y < -20)
         {

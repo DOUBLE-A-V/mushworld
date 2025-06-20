@@ -124,8 +124,7 @@ public class WorldItem : MonoBehaviour
                 tipShowed = false;
             }
         }
-        
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.F) && !ui.commandLine.gameObject.activeInHierarchy)
         {
             if (touching && ui.state == 0)
             {

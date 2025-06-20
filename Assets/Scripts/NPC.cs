@@ -113,7 +113,7 @@ public class NPC : MonoBehaviour
     
     private void Update()
     {
-        if (touching && player.ui.state == player.ui.CLOSED)
+        if (touching && player.ui.state == player.ui.CLOSED && !player.ui.commandLine.gameObject.activeInHierarchy)
         {
             player.ui.showInteractTip(npcName, "F чтобы взаимодействовать", false);
             if (Input.GetKeyUp(KeyCode.F))

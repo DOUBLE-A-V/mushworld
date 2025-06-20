@@ -19,6 +19,7 @@ public class Loader : MonoBehaviour
 
 	public static string workDir = System.IO.Directory.GetCurrentDirectory();
 	[SerializeField] private WorldItemManager worldItemManager;
+	[SerializeField] private UI ui;
 
 	public GameObject islandObject = null;
 
@@ -390,24 +391,27 @@ public class Loader : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.H))
+		if (!ui.commandLine.gameObject.activeInHierarchy)
 		{
-			Debug.Log("saving");
-			islandNum = 1;
-			saveCurrentIsland();
-		}
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				Debug.Log("saving");
+				islandNum = 1;
+				saveCurrentIsland();
+			}
 
-		if (Input.GetKeyDown(KeyCode.N))
-		{
-			Debug.Log("loading island");
-			clearCurrentIsland();
-			loadIsland(1);
-		}
+			if (Input.GetKeyDown(KeyCode.N))
+			{
+				Debug.Log("loading island");
+				clearCurrentIsland();
+				loadIsland(1);
+			}
 
-		if (Input.GetKeyDown(KeyCode.J))
-		{
-			Debug.Log("next island");
-			nextIsland();
+			if (Input.GetKeyDown(KeyCode.J))
+			{
+				Debug.Log("next island");
+				nextIsland();
+			}	
 		}
 	}
 

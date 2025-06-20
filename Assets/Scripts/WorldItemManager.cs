@@ -135,23 +135,30 @@ public class WorldItemManager : MonoBehaviour
     {
         leftPressed = Input.GetMouseButton(0);
 
-        if (Input.GetKey(KeyCode.E))
+        if (!player.ui.commandLine.gameObject.activeInHierarchy)
         {
-            turn = -1;
-        } else if (Input.GetKey(KeyCode.Q))
-        {
-            turn = 1;
-        }
-        else
-        {
-            turn = 0;
-        }
+            if (Input.GetKey(KeyCode.E))
+            {
+                turn = -1;
+            } else if (Input.GetKey(KeyCode.Q))
+            {
+                turn = 1;
+            }
+            else
+            {
+                turn = 0;
+            }
         
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            createItem(
-                UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
-                    10f)), "apple", new Vector2(2, 2), null, true, false, ItemsUser.UseMethod.none, true, true);
+            if (Input.GetKeyUp(KeyCode.R))
+            {
+                createItem(
+                    UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+                        10f)), "apple", new Vector2(2, 2), null, true, false, ItemsUser.UseMethod.none, true, true);
+            }
+            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.P))
+            {
+                makePrebuildFile();
+            }
         }
 
         foreach (WorldItem item in worldItems)
@@ -161,14 +168,9 @@ public class WorldItemManager : MonoBehaviour
                 removeItem(item.id);
             }
         }
-        
-        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.P))
-        {
-            makePrebuildFile();
-        }
     }
 
-    private void makePrebuildFile()
+    public void makePrebuildFile()
     {
         string prebuildData = "";
         string itemData;
