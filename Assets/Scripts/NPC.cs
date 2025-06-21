@@ -101,7 +101,9 @@ public class NPC : MonoBehaviour
     {
         tradesList.Clear();
         
-        for (int i = 0; i < 9; i++)
+		int randomNum = Random.Range(1, 8);
+
+        for (int i = 0; i < randomNum; i++)
         {
             Trade trade = genTrade(itemsGenParams, islandGenParams);
             if (trade != null)

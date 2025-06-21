@@ -96,6 +96,7 @@ public class WorldItemManager : MonoBehaviour
                     
                     Vector3 calcForce = delta.normalized * distance;
 
+                    
                     if (delta.x > 0 && worldItemDragging.rb.velocity.x > 0)
                     {
                         calcForce.x -= worldItemDragging.rb.velocity.x * coef;

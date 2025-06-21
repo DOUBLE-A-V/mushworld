@@ -132,6 +132,7 @@ public class Loader : MonoBehaviour
 		
 		int randomAdded = 0;
 
+		/*
 		int counter = 0;
 		while (randomAdded != targetRandomAdd && counter < 128)
 		{
@@ -145,6 +146,7 @@ public class Loader : MonoBehaviour
 
 			counter++;
 		}
+		*/
 		Debug.Log("random tags added");
 
 		for (int i = 0; i < Random.Range(1, 4); i++)
