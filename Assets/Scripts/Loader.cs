@@ -503,6 +503,46 @@ public class Loader : MonoBehaviour
 		}
 		
 		System.IO.File.WriteAllText(workDir + "/save.txt", data);
+		saveCurrentIsland();
+	}
+
+	public void exitGame()
+	{
+		Application.Quit();
+	}
+
+	public void resetProgress()
+	{
+		foreach (string dir in System.IO.Directory.GetDirectories(workDir + "/islands"))
+		{
+			System.IO.Directory.Delete(dir, true);
+		}
+		System.IO.File.Delete(workDir + "/save.txt");
+		
+		List<Item> removeList = new List<Item>();
+		foreach (Item item in ui.player.Inventory.items)
+		{
+			removeList.Add(item);
+		}
+
+		foreach (Item item in removeList)
+		{
+			Item.removeItem(ui.player.Inventory.removeItem(item.id));
+		}
+		removeList.Clear();
+		foreach (Item item in ui.player.useInventory.items)
+		{
+			removeList.Add(item);
+		}
+
+		foreach (Item item in removeList)
+		{
+			Item.removeItem(ui.player.useInventory.removeItem(item.id));
+		}
+		removeList.Clear();
+		
+		loadStart();
+		ui.closeMenu();
 	}
 	
 	void Update()

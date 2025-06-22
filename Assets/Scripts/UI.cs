@@ -27,6 +27,7 @@ public class UI : MonoBehaviour
 	[SerializeField] private TradeObject tradeObjectPrefab;
 	[SerializeField] public Loader loader;
 	[SerializeField] public TMP_InputField commandLine;
+	[SerializeField] private GameObject menu;
 	
 	
 	public float cellSize = 50;
@@ -48,6 +49,7 @@ public class UI : MonoBehaviour
 	public int SUB_OPENED = 2;
 	public int USE_OPENED = 3;
 	public int TRADE_OPENED = 4;
+	public int MENU_OPENED = 5;
 	
 	public int state = 0;
 
@@ -436,11 +438,52 @@ public class UI : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			closeCommandLine();
+			closeMenu();
 		}
 
 		if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.L))
 		{
 			showCommandLine();
+		}
+	}
+
+	private void openMenu()
+	{
+		menu.SetActive(true);
+		state = MENU_OPENED;
+	}
+
+	public void closeMenu()
+	{
+		menu.SetActive(false);
+		state = CLOSED;
+	}
+
+	public void toggleMenu()
+	{
+		if (state == MENU_OPENED)
+		{
+			closeMenu();
+		} else if (state != CLOSED)
+		{
+			hideInventoryUI();
+			if (state == TRADE_OPENED)
+			{
+				closeTrade();
+			}
+			else
+			{
+				closeInventory();
+				if (subInventory != null)
+				{
+					closeSubInventory();
+				}	
+			}
+			openMenu();
+		}
+		else
+		{
+			openMenu();
 		}
 	}
 
