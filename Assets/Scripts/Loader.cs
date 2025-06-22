@@ -123,6 +123,7 @@ public class Loader : MonoBehaviour
 		}
 		else
 		{
+			islandTypes.Remove(IslandType.first);
 			islandType = islandTypes[Random.Range(0, islandTypes.Count-1)];	
 		}
 		
@@ -164,8 +165,12 @@ public class Loader : MonoBehaviour
 			}
 			Debug.Log("npc generated");	
 		}
-		loadPrebuildData();
-		
+
+		if (System.IO.File.Exists(workDir + "/prebuilds/" + islandType + ".pbd"))
+		{
+			loadPrebuildData();
+		}
+
 		saveCurrentIsland();
 	}
 

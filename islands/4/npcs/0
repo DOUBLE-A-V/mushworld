@@ -1,0 +1,12 @@
+npc
+:trade
+plank;
+apple;
+:trade
+apple;
+plank;
+:trade
+apple;
+plank;
+:position
+4,370581;-1,299995
