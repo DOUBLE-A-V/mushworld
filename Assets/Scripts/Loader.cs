@@ -7,6 +7,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
+using InvManager;
 
 public class Loader : MonoBehaviour
 {
@@ -115,8 +116,15 @@ public class Loader : MonoBehaviour
 		clearCurrentIsland();
 		
 		List<IslandType> islandTypes = Enum.GetValues(typeof(IslandType)).Cast<IslandType>().ToList();
-		
-		islandType = islandTypes[Random.Range(0, islandTypes.Count-1)];
+
+		if (islandNum == 0)
+		{
+			islandType = IslandType.first;
+		}
+		else
+		{
+			islandType = islandTypes[Random.Range(0, islandTypes.Count-1)];	
+		}
 		
 		islandObject = Instantiate(Resources.Load<GameObject>("islands/" + islandType.ToString()));
 
@@ -148,13 +156,14 @@ public class Loader : MonoBehaviour
 		}
 		*/
 		Debug.Log("random tags added");
-
-		for (int i = 0; i < Random.Range(1, 4); i++)
+		if (islandNum != 0)
 		{
-			genNPC();
+			for (int i = 0; i < Random.Range(1, 4); i++)
+			{
+				genNPC();
+			}
+			Debug.Log("npc generated");	
 		}
-		Debug.Log("npc generated");
-
 		loadPrebuildData();
 		
 		saveCurrentIsland();
@@ -389,8 +398,113 @@ public class Loader : MonoBehaviour
 	{
 		loadItemPrefab("notexture");
 		loadNPCPrefab("npc");
+		if (System.IO.File.Exists(workDir + "/save.txt"))
+		{
+			loadSave();
+		}
+		else
+		{
+			loadStart();
+		}
 	}
 
+	private void loadStart()
+	{
+		islandNum = 0;
+		genIsland();
+		
+		Sprite sprite = islandObject.GetComponent<SpriteRenderer>().sprite;
+		ui.player.transform.position = new Vector2((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 10);
+		Camera.main.transform.position = new Vector3((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 0, -10);
+		ui.player.rb.velocity = new Vector2(0, 0.1f);
+		Camera.main.gameObject.GetComponent<CameraScript>().followPlayer = false;
+		ui.player.requestEnableCam = true;
+	}
+
+	private void loadSave()
+	{
+		List<Item> removeList = new List<Item>();
+		foreach (Item item in ui.player.Inventory.items)
+		{
+			removeList.Add(item);
+		}
+
+		foreach (Item item in removeList)
+		{
+			Item.removeItem(ui.player.Inventory.removeItem(item.id));
+		}
+		removeList.Clear();
+		foreach (Item item in ui.player.useInventory.items)
+		{
+			removeList.Add(item);
+		}
+
+		foreach (Item item in removeList)
+		{
+			Item.removeItem(ui.player.useInventory.removeItem(item.id));
+		}
+		removeList.Clear();
+		
+		
+		List<string> data = new List<string>(System.IO.File.ReadAllLines(workDir + "/save.txt"));
+		islandNum = int.Parse(data[0]);
+		Item.idCounter = uint.Parse(data[1]);
+
+		data.RemoveAt(0);
+		data.RemoveAt(0);
+		
+		bool readingActiveCells = false;
+		
+		foreach (string line in data)
+		{
+			if (!readingActiveCells)
+			{
+				if (line == ":activecells")
+				{
+					readingActiveCells = true;
+					continue;
+				}
+				else
+				{
+					string[] split = line.Split(" ");
+					Item item = new Item(split[0]);
+					item.id = uint.Parse(split[2]);
+					string[] posSplit = split[1].Split(";");
+					ui.player.Inventory.insertItem(item, new Vector2(float.Parse(posSplit[0].Replace(".", ",")), float.Parse(posSplit[1].Replace(".", ","))));
+				}	
+			}
+			else
+			{
+				string[] split = line.Split(" ");
+				Item item = new Item(split[0]);
+				item.id = uint.Parse(split[2]);
+				string[] posSplit = split[1].Split(";");
+				ui.player.useInventory.insertItem(item, new Vector2(float.Parse(posSplit[0].Replace(".", ",")), float.Parse(posSplit[1].Replace(".", ","))));
+			}
+		}
+		loadIsland(islandNum);
+	}
+	
+	public void makeSave()
+	{
+		string data = islandNum.ToString();
+		data += "\n" + Item.idCounter;
+		foreach (Item item in ui.player.Inventory.items)
+		{
+			
+			data += "\n" + item.name + " " + item.position.x.ToString() + ";" + item.position.y.ToString() + " " + item.id;
+		}
+
+		data += "\n:activecells";
+
+		foreach (Item item in ui.player.useInventory.items)
+		{
+			data += "\n" + item.name + " " + item.position.x.ToString() + ";" + item.position.y.ToString() + " " + item.id;
+		}
+		
+		System.IO.File.WriteAllText(workDir + "/save.txt", data);
+	}
+	
 	void Update()
 	{
 		if (!ui.commandLine.gameObject.activeInHierarchy)
@@ -415,8 +529,15 @@ public class Loader : MonoBehaviour
 				nextIsland();
 			}	
 		}
+
+		if (Input.GetKeyDown(KeyCode.LeftAlt))
+		{
+			makeSave();
+		}
 	}
 
+	
+	
 	void loadPrebuildData()
 	{
 		List<string> prebuildItems = System.IO.File.ReadAllLines(workDir + "/prebuilds/" + islandType + ".pbd").ToList();

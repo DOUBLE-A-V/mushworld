@@ -53,6 +53,7 @@ public class WorldItemManager : MonoBehaviour
                 worldItems.Remove(worldItem);
                 Destroy(worldItem.gameObject);
                 Item.removeItem(id);
+                break;
             }
         }
     }

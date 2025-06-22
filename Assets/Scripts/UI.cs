@@ -17,7 +17,7 @@ public class UI : MonoBehaviour
 	[SerializeField] TMP_Text inventoryTitle;
 	[SerializeField] TMP_Text subInventoryTitle;
 	[SerializeField] TMP_Text tip;
-	[SerializeField] private Player player;
+	[SerializeField] public Player player;
 	[SerializeField] public WorldItemManager worldItemManager;
 	[SerializeField] private DropDownMenu dropDownMenu;
 	[SerializeField] public ItemsUser itemsUser;
@@ -496,6 +496,10 @@ public class UI : MonoBehaviour
 				break;
 			case "makePrebuildFile":
 				worldItemManager.makePrebuildFile();
+				break;
+			case "setIsland":
+				Destroy(loader.islandObject);
+				loader.islandObject = Instantiate(Resources.Load("islands/" + cmdSep[1]) as GameObject);
 				break;
 		}
 	}

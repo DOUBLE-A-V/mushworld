@@ -1105,7 +1105,7 @@ MonoBehaviour:
   - itemName: apple
     stringData: []
     floatData: []
-    size: {x: 2, y: 2}
+    size: {x: 1, y: 1}
     effects: []
     eatable: 1
     usable: 0
@@ -1130,6 +1130,7 @@ MonoBehaviour:
   usingItemNum: -1
   usingItemOffset: {x: 0, y: 0}
   health: 5
+  requestEnableCam: 0
 --- !u!61 &749078208
 BoxCollider2D:
   m_ObjectHideFlags: 0

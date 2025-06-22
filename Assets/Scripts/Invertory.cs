@@ -36,7 +36,7 @@ namespace InvManager
         
         public static List<ItemPresets> itemsPresets = new List<ItemPresets>();
         
-        static private uint idCounter = 0;
+        static public uint idCounter = 0;
         static public List<Item> allItems = new List<Item>();
        
         public uint id = 0;

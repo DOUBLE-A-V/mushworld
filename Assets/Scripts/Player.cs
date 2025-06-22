@@ -12,7 +12,7 @@ using Debug = UnityEngine.Debug;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] public Rigidbody2D rb;
     [SerializeField] private float jumpForce;
     [SerializeField] public UI ui;
 
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
 
     private const int DAMAGE_NORMAL = 0;
 
-    private bool requestEnableCam = false;
+    public bool requestEnableCam = false;
     
     Effects.Effects effects = new Effects.Effects();
 
@@ -474,7 +474,6 @@ public class Player : MonoBehaviour
     private void nextIsland()
     {
         ui.loader.nextIsland();
-        Debug.Log(ui.loader.islandObject);
         Sprite sprite = ui.loader.islandObject.GetComponent<SpriteRenderer>().sprite;
         transform.position = new Vector2((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 10);
         Camera.main.transform.position = new Vector3((sprite.rect.width * ui.loader.islandObject.transform.localScale.x / 100f)/2f - 2, 0, -10);
