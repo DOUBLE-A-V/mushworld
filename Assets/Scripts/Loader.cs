@@ -21,6 +21,7 @@ public class Loader : MonoBehaviour
 	public static string workDir = System.IO.Directory.GetCurrentDirectory();
 	[SerializeField] private WorldItemManager worldItemManager;
 	[SerializeField] private UI ui;
+	[SerializeField] private List<string> islandTypes;
 
 	public GameObject islandObject = null;
 
@@ -36,7 +37,7 @@ public class Loader : MonoBehaviour
 	[Serializable]
 	public class IslandGenParams
 	{
-		public IslandType islandType;
+		public string islandType;
 		public List<GenTag> genTags;
 	}
 	
@@ -47,16 +48,22 @@ public class Loader : MonoBehaviour
 		none = 0,
 		wood = 1,
 		stone = 2,
-	}
-
-	public enum IslandType
-	{
-		none = 0,
-		first = 1
+		water = 3,
+		potato = 4,
+		brick = 5,
+		vegetation = 6,
+		oil = 7,
+		diamond = 8,
+		rubine = 9,
+		iron = 10,
+		gold = 11,
+		silver = 12,
+		plastic = 13,
+		gas = 14
 	}
 	
 	public int islandNum = 0;
-	public IslandType islandType = IslandType.none;
+	public string islandType = "none";
 
 	public void nextIsland()
 	{
@@ -114,17 +121,16 @@ public class Loader : MonoBehaviour
 	public void genIsland()
 	{
 		clearCurrentIsland();
-		
-		List<IslandType> islandTypes = Enum.GetValues(typeof(IslandType)).Cast<IslandType>().ToList();
 
 		if (islandNum == 0)
 		{
-			islandType = IslandType.first;
+			islandType = "first";
 		}
 		else
 		{
-			islandTypes.Remove(IslandType.first);
+			islandTypes.Remove("first");
 			islandType = islandTypes[Random.Range(0, islandTypes.Count-1)];	
+			islandTypes.Add("first");
 		}
 		
 		islandObject = Instantiate(Resources.Load<GameObject>("islands/" + islandType.ToString()));
@@ -141,7 +147,7 @@ public class Loader : MonoBehaviour
 		
 		int randomAdded = 0;
 
-		/*
+		
 		int counter = 0;
 		while (randomAdded != targetRandomAdd && counter < 128)
 		{
@@ -155,7 +161,7 @@ public class Loader : MonoBehaviour
 
 			counter++;
 		}
-		*/
+		
 		Debug.Log("random tags added");
 		if (islandNum != 0)
 		{
@@ -513,6 +519,8 @@ public class Loader : MonoBehaviour
 
 	public void exitGame()
 	{
+		makeSave();
+		
 		Application.Quit();
 	}
 

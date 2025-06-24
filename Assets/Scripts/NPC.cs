@@ -13,6 +13,7 @@ public class NPC : MonoBehaviour
     
     private bool touching = false;
     [SerializeField] public string npcName;
+    private bool tipShowed = false;
     
     [System.Serializable]
     public class Trade
@@ -117,14 +118,16 @@ public class NPC : MonoBehaviour
     {
         if (touching && player.ui.state == player.ui.CLOSED && !player.ui.commandLine.gameObject.activeInHierarchy)
         {
+            tipShowed = true;
             player.ui.showInteractTip(npcName, "F чтобы взаимодействовать", false);
             if (Input.GetKeyUp(KeyCode.F))
             {
                 player.ui.openTradeUI(tradesList, this);
             }
         }
-        else
+        else if (tipShowed)
         {
+            tipShowed = false;
             player.ui.hideInteractTip();
         }
     }

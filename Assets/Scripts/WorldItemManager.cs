@@ -168,6 +168,7 @@ public class WorldItemManager : MonoBehaviour
             if (item.transform.position.y < -20)
             {
                 removeItem(item.id);
+                break;
             }
         }
     }

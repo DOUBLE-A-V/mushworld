@@ -439,6 +439,7 @@ public class UI : MonoBehaviour
 		{
 			closeCommandLine();
 			closeMenu();
+			closeTrade();
 		}
 
 		if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.L))
