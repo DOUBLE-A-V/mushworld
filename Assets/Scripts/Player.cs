@@ -11,6 +11,7 @@ using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
 {
+    private static readonly int State1 = Animator.StringToHash("state");
     [SerializeField] private float speed;
     [SerializeField] public Rigidbody2D rb;
     [SerializeField] private float jumpForce;
@@ -20,7 +21,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] public List<Item.ItemPresets> itemsPresets;
     [SerializeField] private CameraScript cam;
-    
+    [SerializeField] private Animator animator;
     
     private bool pressedJump = false;
     public Vector2 movingSpeed;
@@ -199,7 +200,7 @@ public class Player : MonoBehaviour
                 wasNPC = true;
             }
         }
-        if (!jumped || wasNPC)
+        if (!jumped && wasNPC)
         {
             if (right)
             {
@@ -504,6 +505,22 @@ public class Player : MonoBehaviour
         if (usingItem != null)
         {
             usingItemObject.transform.position = Vector3.Lerp(usingItemObject.transform.position, transform.position + new Vector3(usingItemOffset.x, usingItemOffset.y), usingItemMoveTime);   
+        }
+        
+        if (rb.velocity.y == 0)
+        {
+            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !controlsLocked)
+            {
+                animator.SetInteger(State1, 1);
+            }
+            else
+            {
+                animator.SetInteger(State1, 3);
+            }
+        }
+        else
+        {
+            animator.SetInteger(State1, 2);
         }
     }
 }
