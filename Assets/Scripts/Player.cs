@@ -8,6 +8,7 @@ using InvManager;
 using Effects;
 using Effect = Effects.Effect;
 using Debug = UnityEngine.Debug;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class Player : MonoBehaviour
     public bool requestEnableCam = false;
     
     Effects.Effects effects = new Effects.Effects();
+    
+    private Vector3 targetRotation = Vector3.zero;
 
     public void clearUsingItem()
     {
@@ -125,30 +128,15 @@ public class Player : MonoBehaviour
     {
         Item.itemsPresets = itemsPresets;
         
-        Loader.loadItemPrefab("apple");
-        usingItemSprite = usingItemObject.GetComponent<SpriteRenderer>();
         sprite = GetComponent<SpriteRenderer>();
-        
-        InventoryManager subInventory = new InventoryManager();
-        new Item("null");
-        new Item("apple", new Vector2(1, 1));
         
         Inventory.refactorCells(new Vector2(9, 6));
         useInventory.refactorCells(new Vector2(6, 2));
         
-        Inventory.addItem(new Item("apple", new Vector2(5, 3), null));
-        Inventory.insertItem(new Item("apple", new Vector2(1, 1), null), new Vector2(5, 5));
-        
-        for (int i = 0; i < 9; i++)
-        {
-            subInventory.addItem(new Item("apple", new Vector2(1, 1), null));
-        }
-        subInventory.addItem(new Item("apple", new Vector2(2, 2), null));
+        Inventory.addItem(new Item("apple", new Vector2(5, 3)));
+        Inventory.insertItem(new Item("apple", new Vector2(1, 1)), new Vector2(5, 5));
         
         updateItemsEffects();
-        Inventory.printInventory();
-        ui.openInventory("fuck", Inventory);
-        ui.openInventory("fuck 2", subInventory);
         
         cam = Camera.main.GetComponent<CameraScript>();
     }
@@ -181,14 +169,20 @@ public class Player : MonoBehaviour
     {
         health += amount;
     }
+
+    private void resetRotation()
+    {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
     
     void jump()
     {
         RaycastHit2D hit;
         bool jumped = false;
         bool wasNPC = false;
-        for (int i = -3; i < 4; i++)
+        for (int j = -10; j < 11; j++)
         {
+            float i = j / 10f;
             hit = Physics2D.Raycast(transform.position - new Vector3((float)i/10f, 1, 0), Vector2.down, 0.01f);
             if (hit.collider && !hit.collider.CompareTag("npc"))
             {
@@ -200,7 +194,7 @@ public class Player : MonoBehaviour
                 wasNPC = true;
             }
         }
-        if (!jumped && wasNPC)
+        if (!jumped || wasNPC)
         {
             if (right)
             {
@@ -210,21 +204,12 @@ public class Player : MonoBehaviour
                     hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0.5f, 0), Vector2.right, 0.05f);
                     if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(0.4f, y, 0), Vector2.right, 0.05f))
                     {
-                        float addY = 0.1f;
-                        while (true)
-                        {
-                            hit = Physics2D.Raycast(transform.position + new Vector3(0.4f, y + addY, 0), Vector2.right, 0.05f);
-                            if (!hit.collider)
-                            {
-                                rb.velocity = Vector2.zero;
-                                transform.position += new Vector3(0.5f, y + addY + 0.5f, 0);
-                                break;
-                            }
-                            addY += 0.05f;
-                        }
-
+                        rb.velocity = Vector2.zero;
+                        rb.AddForce(new Vector2(0, jumpForce*1.2f));
+                        targetRotation = new Vector3(0, 0, -1);
+                        transform.rotation = Quaternion.Euler(0, 0, -1);
                         break;
-                    }  
+                    }
                 }
             }
             else
@@ -233,23 +218,15 @@ public class Player : MonoBehaviour
                 {
                     float y = (float)i / 10;
                     hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0.5f, 0), Vector2.left, 0.05f);
-                    if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(-0.4f, y, 0), Vector2.left, 0.05f))
+                    if (!hit.collider && Physics2D.Raycast(transform.position + new Vector3(-0.4f, y, 0), Vector2.left,
+                            0.05f))
                     {
-                        float addY = 0.1f;
-                        while (true)
-                        {
-                            hit = Physics2D.Raycast(transform.position + new Vector3(-0.4f, y + addY, 0), Vector2.left, 0.05f);
-                            if (!hit.collider)
-                            {
-                                rb.velocity = Vector2.zero;
-                                transform.position += new Vector3(-0.5f, y + addY + 0.5f, 0);
-                                break;
-                            }
-                            addY += 0.05f;
-                        }
-
+                        rb.velocity = Vector2.zero;
+                        rb.AddForce(new Vector2(0, jumpForce*1.2f));
+                        targetRotation = new Vector3(0, 0, 360);
+                        transform.rotation = Quaternion.Euler(0, 0, 1);
                         break;
-                    }  
+                    }
                 }
             }
         }
@@ -515,12 +492,20 @@ public class Player : MonoBehaviour
             }
             else
             {
-                animator.SetInteger(State1, 3);
+                animator.SetInteger(State1, 2);
             }
         }
-        else
+
+        if (targetRotation != Vector3.zero)
         {
-            animator.SetInteger(State1, 2);
+            Debug.Log(transform.rotation.eulerAngles);
+            transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.rotation.eulerAngles, targetRotation, 0.2f));
+            Debug.Log(transform.rotation.eulerAngles);
+            if (360 - Math.Abs(transform.rotation.eulerAngles.z) > 355)
+            {
+                targetRotation = Vector3.zero;
+                resetRotation();
+            }
         }
     }
 }

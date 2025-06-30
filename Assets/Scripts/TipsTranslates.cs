@@ -9,7 +9,8 @@ namespace TipsTranslates
 		public static Dictionary<string, string> translates = new Dictionary<string, string>()
 		{
 			{"apple", "яблоко"},
-			{"plank", "доска"}
+			{"plank", "доска"},
+			{"big_plank", "большая доска"}
 		};	
 	}
 }

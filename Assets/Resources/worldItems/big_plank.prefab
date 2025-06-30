@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1822896684421463164}
   - component: {fileID: 2456664689726765052}
   m_Layer: 0
-  m_Name: plank
+  m_Name: big_plank
   m_TagString: worldItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eb010320e86c70f43aba3a05ed5c24d7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 093f287c34897b849b65133953dcec7e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -125,14 +125,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.32}
+    oldSize: {x: 2.56, y: 0.32}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 2.56, y: 0.32}
   m_EdgeRadius: 0
 --- !u!114 &2456664689726765052
 MonoBehaviour:
@@ -146,9 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc04147af5e15f46a969046bf6f89df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSize: {x: 1, y: 1}
+  defaultSize: {x: 3, y: 1}
   id: 0
   itemName: 
   touching: 0
-  size: {x: 0.32, y: 0.32}
+  size: {x: 2.56, y: 0.32}
   rb: {fileID: 780518212127869774}

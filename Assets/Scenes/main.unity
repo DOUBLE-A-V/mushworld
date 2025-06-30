@@ -1343,6 +1343,16 @@ MonoBehaviour:
     useMethod: 0
     removeAfterUse: 0
     trackMouse: 0
+  - itemName: big_plank
+    stringData: []
+    floatData: []
+    size: {x: 3, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
   cam: {fileID: 1310785500}
   animator: {fileID: 749078209}
   movingSpeed: {x: 0, y: 0}
@@ -1666,6 +1676,8 @@ MonoBehaviour:
   - name: apple
     genTags: 0000000001000000
   - name: plank
+    genTags: 01000000
+  - name: big_plank
     genTags: 01000000
   islandsGenParams:
   - islandType: first

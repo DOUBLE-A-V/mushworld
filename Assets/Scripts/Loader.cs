@@ -71,19 +71,19 @@ public class Loader : MonoBehaviour
 		{
 			saveCurrentIsland();
 			clearCurrentIsland();
+			islandNum++;
 			loadIsland(islandNum+1);
 		}
 		else
 		{
 			saveCurrentIsland();
+			islandNum++;
 			genIsland();
 		}
-		islandNum++;
 	}
 	
 	public static void loadItemPrefab(string itemName)
 	{
-		Debug.Log(itemName);
 		worldItems[itemName] = Resources.Load<WorldItem>("worldItems/" + itemName);
 		itemObjects[itemName] = Resources.Load<ItemObject>("items/" + itemName);
 	}
@@ -355,6 +355,10 @@ public class Loader : MonoBehaviour
 		System.IO.Directory.CreateDirectory(islandDir + "/npcs");
 		System.IO.Directory.CreateDirectory(islandDir + "/items");
 
+		Debug.Log("saving " + islandType);
+		
+		System.IO.File.WriteAllText(islandDir + "/data", islandType.ToString());
+		
 		int count = 0;
 		string data;
 		foreach (NPC npc in islandNPCs)
@@ -396,7 +400,6 @@ public class Loader : MonoBehaviour
 			
 			count++;
 		}
-		System.IO.File.WriteAllText(islandDir + "/data", islandType.ToString());
 	}
 	
 	public static void freeNPCPrefab(string npcName)
@@ -460,7 +463,12 @@ public class Loader : MonoBehaviour
 		List<string> data = new List<string>(System.IO.File.ReadAllLines(workDir + "/save.txt"));
 		islandNum = int.Parse(data[0]);
 		Item.idCounter = uint.Parse(data[1]);
+		
+		string[] posSplit = data[2].Split(';');
+		
+		ui.player.transform.position = new Vector2(float.Parse(posSplit[0].Replace(".", ",")), float.Parse(posSplit[1].Replace(".", ",")));
 
+		data.RemoveAt(0);
 		data.RemoveAt(0);
 		data.RemoveAt(0);
 		
@@ -480,7 +488,7 @@ public class Loader : MonoBehaviour
 					string[] split = line.Split(" ");
 					Item item = new Item(split[0]);
 					item.id = uint.Parse(split[2]);
-					string[] posSplit = split[1].Split(";");
+					posSplit = split[1].Split(";");
 					ui.player.Inventory.insertItem(item, new Vector2(float.Parse(posSplit[0].Replace(".", ",")), float.Parse(posSplit[1].Replace(".", ","))));
 				}	
 			}
@@ -489,7 +497,7 @@ public class Loader : MonoBehaviour
 				string[] split = line.Split(" ");
 				Item item = new Item(split[0]);
 				item.id = uint.Parse(split[2]);
-				string[] posSplit = split[1].Split(";");
+				posSplit = split[1].Split(";");
 				ui.player.useInventory.insertItem(item, new Vector2(float.Parse(posSplit[0].Replace(".", ",")), float.Parse(posSplit[1].Replace(".", ","))));
 			}
 		}
@@ -500,6 +508,7 @@ public class Loader : MonoBehaviour
 	{
 		string data = islandNum.ToString();
 		data += "\n" + Item.idCounter;
+		data += "\n" + ui.player.transform.position.x + ";" +  ui.player.transform.position.y;
 		foreach (Item item in ui.player.Inventory.items)
 		{
 			
@@ -609,6 +618,7 @@ public class Loader : MonoBehaviour
 	
 	void loadIsland(int num)
 	{
+		Debug.Log(num);
 		string islandDir = workDir + "/islands/" + num.ToString();
 		
 		foreach (string file in System.IO.Directory.GetFiles(islandDir + "/npcs"))
@@ -620,6 +630,7 @@ public class Loader : MonoBehaviour
 		{
 			loadItem(System.IO.File.ReadAllText(file));
 		}
-		islandObject = Instantiate(Resources.Load("islands/" + System.IO.File.ReadAllText(islandDir + "/data")) as GameObject);
+		islandType = System.IO.File.ReadAllText(islandDir + "/data");
+		islandObject = Instantiate(Resources.Load("islands/" + islandType.ToString()) as GameObject);
 	}
 }

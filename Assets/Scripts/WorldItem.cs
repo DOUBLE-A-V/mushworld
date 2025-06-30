@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Xml.Schema;
 using UnityEngine;
 using InvManager;
 
 public class WorldItem : MonoBehaviour
 {
+    [SerializeField] private Vector2 defaultSize;
     public uint id = 0;
     public string itemName = null;
 
@@ -16,7 +19,7 @@ public class WorldItem : MonoBehaviour
     private UI ui;
     private Player player;
     private SpriteRenderer sprite;
-    public Vector2 size;
+    [SerializeField] public Vector2 size;
     
     public Rigidbody2D rb;
     private BoxCollider2D boxCollider;
@@ -34,12 +37,12 @@ public class WorldItem : MonoBehaviour
             boxCollider = GetComponent<BoxCollider2D>();
             rb = GetComponent<Rigidbody2D>();
         }
-        
-        Vector2 pixelSize = itemSize * ui.cellSize / 100;
-        
-        size = pixelSize;
 
-        transform.localScale = pixelSize / sprite.size;
+        
+        Vector2 pixelSize = (((size / defaultSize) / 0.32f) * (ui.cellSize / 100f)) * itemSize;
+
+        transform.localScale = pixelSize / size;
+        size = pixelSize;
     }
     
     void disablePhysics()
