@@ -1,0 +1,12 @@
+npc
+:trade
+iron_shield;
+matches;iron_hammer;
+:trade
+copper;
+
+:trade
+silver_shield;
+silver_sword;
+:position
+-2,14297;-2,699995

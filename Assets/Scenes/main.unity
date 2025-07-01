@@ -1333,6 +1333,7 @@ MonoBehaviour:
     useMethod: 0
     removeAfterUse: 1
     trackMouse: 0
+    usingScale: {x: 1, y: 1}
   - itemName: plank
     stringData: []
     floatData: []
@@ -1343,6 +1344,7 @@ MonoBehaviour:
     useMethod: 0
     removeAfterUse: 0
     trackMouse: 0
+    usingScale: {x: 1, y: 1}
   - itemName: big_plank
     stringData: []
     floatData: []
@@ -1353,6 +1355,296 @@ MonoBehaviour:
     useMethod: 0
     removeAfterUse: 0
     trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: tomato
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: silver_hammer
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: cucumber
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: greenery
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: butter
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: silver_shield
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: stone
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: iron_hammer
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: titanium_sword
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: titanium_hammer
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: gold
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: copper
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: straw
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: knife
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: silver
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: stone_hammer
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: titanium
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: iron
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: rope
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: water
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: matches
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: potato
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: silver_sword
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 1
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: iron_shield
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: iron_sword
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 2, y: 2}
+  - itemName: bow
+    stringData:
+    - arrow
+    floatData:
+    - 1
+    - 0.2
+    size: {x: 1, y: 2}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 2
+    removeAfterUse: 0
+    trackMouse: 1
+    usingScale: {x: 2, y: 2}
   cam: {fileID: 1310785500}
   animator: {fileID: 749078209}
   movingSpeed: {x: 0, y: 0}
@@ -1679,11 +1971,65 @@ MonoBehaviour:
     genTags: 01000000
   - name: big_plank
     genTags: 01000000
+  - name: tomato
+    genTags: 05000000
+  - name: silver_hammer
+    genTags: 010000000b0000000e000000
+  - name: cucumber
+    genTags: 0300000005000000
+  - name: greenery
+    genTags: 0300000005000000
+  - name: butter
+    genTags: 06000000
+  - name: silver_shield
+    genTags: 0b000000010000000e000000
+  - name: stone
+    genTags: 02000000
+  - name: iron_hammer
+    genTags: 01000000090000000e000000
+  - name: titanium_sword
+    genTags: 010000000f00000010000000
+  - name: titanium_hammer
+    genTags: 010000000f00000010000000
+  - name: gold
+    genTags: 0a000000
+  - name: copper
+    genTags: 11000000
+  - name: straw
+    genTags: 05000000
+  - name: knife
+    genTags: 09000000010000000e000000
+  - name: silver
+    genTags: 0b000000
+  - name: stone_hammer
+    genTags: 020000000100000012000000
+  - name: titanium
+    genTags: 0f000000
+  - name: iron
+    genTags: 09000000
+  - name: rope
+    genTags: 12000000
+  - name: water
+    genTags: 1300000003000000
+  - name: matches
+    genTags: 010000000e000000
+  - name: potato
+    genTags: 0500000003000000
+  - name: silver_sword
+    genTags: 0e0000000b00000001000000
+  - name: iron_shield
+    genTags: 0e0000000900000001000000
+  - name: iron_sword
+    genTags: 0e0000000900000001000000
+  - name: bow
+    genTags: 1200000001000000
+  - name: bottle
+    genTags: 13000000
   islandsGenParams:
   - islandType: first
     genTags: 00000000
   - islandType: soup
-    genTags: 0400000006000000070000000300000001000000
+    genTags: 060000000300000001000000
   islandNum: 0
   islandType: 
 --- !u!4 &875798430

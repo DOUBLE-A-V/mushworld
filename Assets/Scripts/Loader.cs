@@ -8,6 +8,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 using InvManager;
+using Unity.VisualScripting;
 
 public class Loader : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class Loader : MonoBehaviour
 	public static Dictionary<string, ItemObject> itemObjects = new Dictionary<string, ItemObject>();
 
 	private static Dictionary<string, NPC> npcs = new Dictionary<string, NPC>();
+	
+	public static Dictionary<string, Projectile> projectiles = new Dictionary<string, Projectile>();
 	
 	public static List<NPC> islandNPCs = new List<NPC>();
 
@@ -39,6 +42,12 @@ public class Loader : MonoBehaviour
 	{
 		public string islandType;
 		public List<GenTag> genTags;
+
+		public IslandGenParams(string islandType, List<GenTag> genTags)
+		{
+			this.islandType = islandType;
+			this.genTags = genTags;
+		}
 	}
 	
 	[SerializeField] private List<ItemGenParams> itemsGenParams;
@@ -49,22 +58,27 @@ public class Loader : MonoBehaviour
 		wood = 1,
 		stone = 2,
 		water = 3,
-		potato = 4,
-		brick = 5,
-		vegetation = 6,
-		oil = 7,
-		diamond = 8,
-		rubine = 9,
-		iron = 10,
-		gold = 11,
-		silver = 12,
-		plastic = 13,
-		gas = 14
+		brick = 4,
+		vegetation = 5,
+		butter = 6,
+		diamond = 7,
+		rubine = 8,
+		iron = 9,
+		gold = 10,
+		silver = 11,
+		plastic = 12,
+		gas = 13,
+		fire = 14,
+		titanium = 15,
+		extrahot = 16,
+		copper = 17,
+		rope = 18,
+		glass = 19
 	}
 	
 	public int islandNum = 0;
 	public string islandType = "none";
-
+	
 	public void nextIsland()
 	{
 		if (System.IO.Directory.Exists(workDir + "/islands/" + (islandNum + 1)))
@@ -86,6 +100,11 @@ public class Loader : MonoBehaviour
 	{
 		worldItems[itemName] = Resources.Load<WorldItem>("worldItems/" + itemName);
 		itemObjects[itemName] = Resources.Load<ItemObject>("items/" + itemName);
+	}
+
+	public static void loadProjectilePrefab(string projectileName)
+	{
+		projectiles[projectileName] = Resources.Load<Projectile>("projectiles/" + projectileName);
 	}
 
 	public static void freeItemPrefab(string itemName, bool removeFromList = true)
@@ -139,7 +158,7 @@ public class Loader : MonoBehaviour
 		{
 			if (genParams.islandType == islandType)
 			{
-				currentIslandGenParams = genParams;
+				currentIslandGenParams = new IslandGenParams(genParams.islandType, new List<GenTag>(genParams.genTags));
 			}
 		}
 
@@ -161,15 +180,12 @@ public class Loader : MonoBehaviour
 
 			counter++;
 		}
-		
-		Debug.Log("random tags added");
 		if (islandNum != 0)
 		{
-			for (int i = 0; i < Random.Range(1, 4); i++)
+			for (int i = 0; i < Random.Range(1, 3); i++)
 			{
 				genNPC();
 			}
-			Debug.Log("npc generated");	
 		}
 
 		if (System.IO.File.Exists(workDir + "/prebuilds/" + islandType + ".pbd"))
@@ -354,8 +370,6 @@ public class Loader : MonoBehaviour
 		System.IO.Directory.CreateDirectory(islandDir);
 		System.IO.Directory.CreateDirectory(islandDir + "/npcs");
 		System.IO.Directory.CreateDirectory(islandDir + "/items");
-
-		Debug.Log("saving " + islandType);
 		
 		System.IO.File.WriteAllText(islandDir + "/data", islandType.ToString());
 		
@@ -618,7 +632,6 @@ public class Loader : MonoBehaviour
 	
 	void loadIsland(int num)
 	{
-		Debug.Log(num);
 		string islandDir = workDir + "/islands/" + num.ToString();
 		
 		foreach (string file in System.IO.Directory.GetFiles(islandDir + "/npcs"))

@@ -14,6 +14,44 @@ public class NPC : MonoBehaviour
     private bool touching = false;
     [SerializeField] public string npcName;
     private bool tipShowed = false;
+
+    [SerializeField] public bool enemy;
+
+    [SerializeField] public float health;
+
+    [SerializeField] private List<dropItem> dropItems;
+    
+    [System.Serializable]
+    private class dropItem
+    {
+        public string name;
+        public float dropChance;
+    }
+    
+    
+    public void doDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            onDeath();
+        }
+    }
+
+    private void onDeath()
+    {
+        foreach (dropItem item in dropItems)
+        {
+            if (Random.Range(0, 100) < item.dropChance)
+            {
+                player.ui.worldItemManager.createItem(transform.position, item.name);
+            }
+        }
+
+        Loader.islandNPCs.Remove(this);
+        
+        Destroy(gameObject);
+    }
     
     [System.Serializable]
     public class Trade
@@ -42,54 +80,86 @@ public class NPC : MonoBehaviour
         Loader.ItemGenParams productGenParams = null;
         int counter = 0;
         
-        while (productGenParams == null && counter < 256)
+        List<Loader.ItemGenParams> cantItemsGenParams = new List<Loader.ItemGenParams>();
+        
+        foreach (Loader.ItemGenParams itemGenParams in itemsGenParams)
         {
-            foreach (Loader.ItemGenParams itemGenParams in itemsGenParams)
+            bool canbe = true;
+            
+            needGenTags.Clear();
+            foreach (Loader.GenTag genTag in itemGenParams.genTags)
             {
-                bool canbe = true;
-                needGenTags.Clear();
-                foreach (Loader.GenTag genTag in itemGenParams.genTags)
+                if (!islandGenParams.genTags.Contains(genTag))
                 {
-                    if (!islandGenParams.genTags.Contains(genTag))
-                    {
-                        canbe = false;
-                        needGenTags.Add(genTag);
-                    }
-                }
-
-                if (!canbe && Random.Range(0, 2) == 1)
-                {
-                    productGenParams = itemGenParams;
-                    break;
+                    canbe = false;
+                    needGenTags.Add(genTag);
                 }
             }
 
-            counter++;
+            if (!canbe)
+            {
+                cantItemsGenParams.Add(itemGenParams);
+            }
         }
+
+        counter++;
+
+        if (cantItemsGenParams.Count != 0)
+        {
+            productGenParams = cantItemsGenParams[Random.Range(0, cantItemsGenParams.Count-1)];   
+        }
+        
+        needGenTags.Clear();
+        foreach (Loader.GenTag genTag in productGenParams.genTags)
+        {
+            if (!islandGenParams.genTags.Contains(genTag))
+            {
+                needGenTags.Add(genTag);
+            }
+        }
+        
         if (productGenParams != null)
         {
             trade.products.Add(productGenParams.name);
             int first = Random.Range(0, needGenTags.Count);
             int second = Random.Range(0, needGenTags.Count);
+
+            int itemsCount = Random.Range(1, 3);
+            
+            List<string> canRequiredItems = new List<string>();
+            
             foreach (Loader.ItemGenParams itemGenParams in itemsGenParams)
             {
                 if (itemGenParams != productGenParams)
                 {
-                    if ((needGenTags.Count > 1 && itemGenParams.genTags.Contains(needGenTags[first]) &&
-                         itemGenParams.genTags.Contains(needGenTags[second])) ||
+                    if ((needGenTags.Count > 1 && (itemGenParams.genTags.Contains(needGenTags[first]) ||
+                                                   itemGenParams.genTags.Contains(needGenTags[second]))) ||
                         (needGenTags.Count == 1 && itemGenParams.genTags.Contains(needGenTags[first])))
                     {
-                        if (!trade.required.Contains(itemGenParams.name))
+                        if (!canRequiredItems.Contains(itemGenParams.name))
                         {
-                            trade.required.Add(itemGenParams.name);
-                            if (Random.Range(0, 1) == 1)
-                            {
-                                break;
-                            }
+                            canRequiredItems.Add(itemGenParams.name);
                         }
                     }
                 }
             }
+
+            Debug.Log("product: " + productGenParams.name);
+            foreach (string item in canRequiredItems)
+            {
+                Debug.Log(item);
+            }
+            for (int i = 0; i < itemsCount; i++)
+            {
+                if (canRequiredItems.Count == 0)
+                {
+                    break;
+                }
+                string item = canRequiredItems[Random.Range(0, canRequiredItems.Count - 1)];
+                trade.required.Add(item);
+                canRequiredItems.Remove(item);
+            }
+            
             return trade;
         }
         else

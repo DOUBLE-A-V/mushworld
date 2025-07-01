@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using InvManager;
+using DG.Tweening;
+using DG.Tweening.Plugins.Options;
+using Unity.VisualScripting;
 
 public class ItemsUser : MonoBehaviour
 {
@@ -12,14 +15,35 @@ public class ItemsUser : MonoBehaviour
 	public enum UseMethod
 	{
 		none = 0,
-		test = 1
+		hit = 1,
+		throwProjectile = 2
 	}
-
-	private class UsingMethods
+	
+	public static class UsingMethods
 	{
-		static public void test()
+		static private void resetItemRotation()
 		{
-			Debug.Log("test using");
+			player.usingItemObject.transform.DORotate(new Vector3(0, 0, 0), 0.5f);
+		}
+		
+		public static Player player;
+		static public void hit(Item item)
+		{
+			player.usingItemObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+			player.usingItemObject.transform.DOKill();
+			if (player.right)
+			{
+				player.usingItemObject.transform.DORotate(new Vector3(0, 0, -90), 0.1f).onComplete = resetItemRotation;	
+			}
+			else
+			{
+				player.usingItemObject.transform.DORotate(new Vector3(0, 0, 90), 0.1f).onComplete = resetItemRotation;
+			}
+		}
+
+		static public void throwProjectile(Item item)
+		{
+			player.ui.worldItemManager.throwProjectile(item, item.stringData[0], player.usingItemObject.transform.position, player.ui.worldItemManager.getMouseWorldPosition());
 		}
 	}
 	
@@ -29,8 +53,11 @@ public class ItemsUser : MonoBehaviour
 		{
 			case UseMethod.none:
 				break;
-			case UseMethod.test:
-				UsingMethods.test();
+			case UseMethod.hit:
+				UsingMethods.hit(item);
+				break;
+			case UseMethod.throwProjectile:
+				UsingMethods.throwProjectile(item);
 				break;
 		}
 		if (item.removeAfterUse)

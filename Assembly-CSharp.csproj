@@ -51,6 +51,7 @@
     <Compile Include="Assets\Scripts\ItemObject.cs" />
     <Compile Include="Assets\Scripts\TipsTranslates.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModulePhysics.cs" />
+    <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\DOTween_1_2_765\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\Scripts\Cell.cs" />
     <Compile Include="Assets\Scripts\DropDownMenu.cs" />

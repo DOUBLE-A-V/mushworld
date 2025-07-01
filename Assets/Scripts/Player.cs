@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     public bool right = true;
     public InvManager.InventoryManager Inventory = new  InvManager.InventoryManager();
     public InventoryManager useInventory = new InventoryManager();
-    [SerializeField] GameObject usingItemObject;
+    [SerializeField] public GameObject usingItemObject;
     private SpriteRenderer usingItemSprite;
     private SpriteRenderer sprite;
 
@@ -139,6 +139,7 @@ public class Player : MonoBehaviour
         updateItemsEffects();
         
         cam = Camera.main.GetComponent<CameraScript>();
+        ItemsUser.UsingMethods.player = this;
     }
 
     public float affectDamage(int type, int amount)
@@ -265,9 +266,11 @@ public class Player : MonoBehaviour
         usingItemObject.transform.position = transform.position;
         usingItemObject.SetActive(true);
         usingItem = item;
-        usingItemSprite.sprite = Instantiate(Loader.worldItems[item.name].GetComponent<SpriteRenderer>().sprite);
+        usingItemSprite = usingItemObject.GetComponent<SpriteRenderer>();
+        usingItemSprite.sprite = Loader.worldItems[item.name].GetComponent<SpriteRenderer>().sprite;
         changeDirection(right);
         ui.refreshUsingItemNumText();
+        usingItemObject.transform.localScale = new Vector3(usingItem.usingScale.x, usingItem.usingScale.y, 1);
     }
 
     private void changeDirection(bool isRight = true)
@@ -466,8 +469,8 @@ public class Player : MonoBehaviour
         {
             if (usingItem.trackMouse)
             {
-                usingItemObject.transform.LookAt(G.getMouseWorldPosition());
-                usingItemObject.transform.rotation = new Quaternion(0, 0, usingItemObject.transform.rotation.z, 1);
+                Vector2 direction = ui.worldItemManager.getMouseWorldPosition() - usingItemObject.transform.position;
+                usingItemObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
             }
         }
         

@@ -32,6 +32,7 @@ namespace InvManager
             public ItemsUser.UseMethod useMethod;
             public bool removeAfterUse;
             public bool trackMouse;
+            public Vector2 usingScale;
         }
         
         public static List<ItemPresets> itemsPresets = new List<ItemPresets>();
@@ -39,6 +40,7 @@ namespace InvManager
         static public uint idCounter = 0;
         static public List<Item> allItems = new List<Item>();
        
+        public Vector2 usingScale = Vector2.one;
         public uint id = 0;
         public int itemPartId = -1;
         public string name;
@@ -115,6 +117,8 @@ namespace InvManager
             this.usable = item.usable;
             this.useMethod = item.useMethod;
             
+            this.usingScale = item.usingScale;
+            
             allItems.Add(this);
         }
 
@@ -160,6 +164,7 @@ namespace InvManager
                 this.useMethod = thisPresets.useMethod;
                 this.removeAfterUse = thisPresets.removeAfterUse;
                 this.trackMouse = thisPresets.trackMouse;
+                this.usingScale = thisPresets.usingScale;
             }
 
             if (size != null)

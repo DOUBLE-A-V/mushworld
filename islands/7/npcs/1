@@ -1,0 +1,9 @@
+npc
+:trade
+potato;
+greenery;
+:trade
+cucumber;
+tomato;greenery;
+:position
+4,897975;-2,699995
