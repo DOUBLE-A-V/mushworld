@@ -28,6 +28,8 @@ public class UI : MonoBehaviour
 	[SerializeField] public Loader loader;
 	[SerializeField] public TMP_InputField commandLine;
 	[SerializeField] private GameObject menu;
+
+	[SerializeField] private GameObject art;
 	
 	
 	public float cellSize = 50;
@@ -724,6 +726,12 @@ public class UI : MonoBehaviour
 		subInventoryTitle.gameObject.SetActive(false);
 		state = CLOSED;
 	}
+
+	public void showArt()
+	{
+		art.SetActive(true);
+	}
+	
 	public void openInventory(string title, Inventory inventory)
 	{
 		inventoryOffset = 200f;

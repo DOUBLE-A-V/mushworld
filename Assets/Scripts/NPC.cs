@@ -124,7 +124,7 @@ public class NPC : MonoBehaviour
             int first = Random.Range(0, needGenTags.Count);
             int second = Random.Range(0, needGenTags.Count);
 
-            int itemsCount = Random.Range(1, 3);
+            int itemsCount = Random.Range(1, 2);
             
             List<string> canRequiredItems = new List<string>();
             
@@ -142,12 +142,6 @@ public class NPC : MonoBehaviour
                         }
                     }
                 }
-            }
-
-            Debug.Log("product: " + productGenParams.name);
-            foreach (string item in canRequiredItems)
-            {
-                Debug.Log(item);
             }
             for (int i = 0; i < itemsCount; i++)
             {

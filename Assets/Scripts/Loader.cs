@@ -25,6 +25,7 @@ public class Loader : MonoBehaviour
 	[SerializeField] private WorldItemManager worldItemManager;
 	[SerializeField] private UI ui;
 	[SerializeField] private List<string> islandTypes;
+	[SerializeField] private List<string> allNPCs;
 
 	public GameObject islandObject = null;
 
@@ -73,7 +74,9 @@ public class Loader : MonoBehaviour
 		extrahot = 16,
 		copper = 17,
 		rope = 18,
-		glass = 19
+		glass = 19,
+		coal = 20,
+		meat = 21
 	}
 	
 	public int islandNum = 0;
@@ -198,9 +201,7 @@ public class Loader : MonoBehaviour
 
 	private void genNPC()
 	{
-		List<NPC> allNPCs = new List<NPC>(Resources.FindObjectsOfTypeAll<NPC>());
-		
-		NPC npc = createNPC(allNPCs[Random.Range(0, allNPCs.Count-1)].npcName, true);
+		NPC npc = createNPC(allNPCs[Random.Range(0, allNPCs.Count-1)], true);
 
 		Sprite sprite = islandObject.GetComponent<SpriteRenderer>().sprite;
 

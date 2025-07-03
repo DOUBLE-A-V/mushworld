@@ -1626,8 +1626,8 @@ MonoBehaviour:
     size: {x: 1, y: 2}
     effects: []
     eatable: 0
-    usable: 0
-    useMethod: 0
+    usable: 1
+    useMethod: 1
     removeAfterUse: 0
     trackMouse: 0
     usingScale: {x: 2, y: 2}
@@ -1645,6 +1645,284 @@ MonoBehaviour:
     removeAfterUse: 0
     trackMouse: 1
     usingScale: {x: 2, y: 2}
+  - itemName: lava_ball
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: special_item
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 3
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: can
+    stringData: []
+    floatData: []
+    size: {x: 2, y: 2}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: coal
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: lemon_pie
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 1
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: empty_chest
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: wires
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: lemon
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: coal_fish
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: fork
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: biochemical_reactor
+    stringData: []
+    floatData: []
+    size: {x: 4, y: 4}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: bag
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: horseshoe
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: psilocybe
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: door_handle
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: golden_bucket
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: boiled_liver
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: vacuum_cleaner
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: nonbursting_bubble
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: kubik_rubika
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: radio_receiver
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: tea
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 1
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: gm
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 0
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
+  - itemName: crossbow
+    stringData:
+    - arrow
+    floatData:
+    - 1
+    - 0.3
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 1
+    useMethod: 2
+    removeAfterUse: 0
+    trackMouse: 1
+    usingScale: {x: 1, y: 1}
+  - itemName: battery
+    stringData: []
+    floatData: []
+    size: {x: 1, y: 1}
+    effects: []
+    eatable: 0
+    usable: 0
+    useMethod: 2
+    removeAfterUse: 0
+    trackMouse: 0
+    usingScale: {x: 1, y: 1}
   cam: {fileID: 1310785500}
   animator: {fileID: 749078209}
   movingSpeed: {x: 0, y: 0}
@@ -1963,6 +2241,8 @@ MonoBehaviour:
   islandTypes:
   - first
   - soup
+  allNPCs:
+  - singovna
   islandObject: {fileID: 0}
   itemsGenParams:
   - name: apple
@@ -2025,6 +2305,60 @@ MonoBehaviour:
     genTags: 1200000001000000
   - name: bottle
     genTags: 13000000
+  - name: lava_ball
+    genTags: 1000000002000000
+  - name: special_item
+    genTags: 
+  - name: can
+    genTags: 09000000
+  - name: transformer
+    genTags: 09000000110000000e000000
+  - name: coal
+    genTags: 14000000
+  - name: lemon_pie
+    genTags: 050000000e000000
+  - name: empty_chest
+    genTags: 0900000001000000
+  - name: wires
+    genTags: 110000000c000000
+  - name: lemon
+    genTags: 0500000003000000
+  - name: coal_fish
+    genTags: 1400000010000000
+  - name: fork
+    genTags: 0b0000000e000000
+  - name: biochemical_reactor
+    genTags: 0c0000000e0000001100000009000000
+  - name: firefly
+    genTags: 10000000
+  - name: bag
+    genTags: 0c000000
+  - name: horseshoe
+    genTags: 0e00000009000000
+  - name: psilocybe
+    genTags: 0300000005000000
+  - name: door_handle
+    genTags: 090000000e000000
+  - name: golden_bucket
+    genTags: 0a0000000e000000
+  - name: boiled_liver
+    genTags: 0e00000015000000
+  - name: vacuum_cleaner
+    genTags: 110000000c0000000e00000009000000
+  - name: nonbursting_bubble
+    genTags: 030000000f000000
+  - name: kubik_rubika
+    genTags: 0c000000
+  - name: radio_receiver
+    genTags: 110000000c0000000e00000009000000
+  - name: tea
+    genTags: 05000000030000000e000000
+  - name: gm
+    genTags: 090000000e000000
+  - name: crossbow
+    genTags: 090000000e00000001000000
+  - name: battery
+    genTags: 090000001100000003000000
   islandsGenParams:
   - islandType: first
     genTags: 00000000
@@ -3706,6 +4040,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429318870}
   m_CullTransparentMesh: 1
+--- !u!1 &1445779433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1445779434}
+  - component: {fileID: 1445779436}
+  - component: {fileID: 1445779435}
+  m_Layer: 5
+  m_Name: art
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1445779434
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445779433}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1555769083}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1101, y: 613}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1445779435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445779433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 58bc91f363e44324c82c82449b1b7d8b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1445779436
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445779433}
+  m_CullTransparentMesh: 1
 --- !u!1 &1516297672
 GameObject:
   m_ObjectHideFlags: 0
@@ -3887,6 +4297,7 @@ MonoBehaviour:
   loader: {fileID: 875798429}
   commandLine: {fileID: 1386228780}
   menu: {fileID: 768435812}
+  art: {fileID: 1445779433}
   cellSize: 50
   items: []
   subItems: []
@@ -3981,6 +4392,7 @@ RectTransform:
   - {fileID: 1386228779}
   - {fileID: 984656558}
   - {fileID: 768435813}
+  - {fileID: 1445779434}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

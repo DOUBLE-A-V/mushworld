@@ -36,7 +36,31 @@ namespace TipsTranslates
 			{"silver_sword", "серебряный меч"},
 			{"iron_shield", "железный щит"},
 			{"iron_sword", "железный меч"},
-			{"bow", "лук"}
+			{"bow", "лук"},
+			{"lava_ball", "лавовый шарик"},
+			{"special_item", "специальный предмет"},
+			{"necklace", "ожерелье лишней хромосомы"},
+			{"coal", "уголь"},
+			{"lemon_pie", "лимонный пирог"},
+			{"empty_chest", "пустой сундук"},
+			{"wires", "провода"},
+			{"lemon", "лимон"},
+			{"bag", "пакет"},
+			{"biochemical_reactor", "биохимический реактор"},
+			{"firefly", "светящке"},
+			{"fork", "вилка"},
+			{"horseshoe", "подкова"},
+			{"psilocybe", "псилоцибе"},
+			{"golden_bucket", "золотое ведро"},
+			{"boiled_liver", "вареная печень"},
+			{"vacuum_cleaner", "пылесос"},
+			{"nonbursting_bubble", "нелопающийся пузырь"},
+			{"kubik_rubika", "кубик рубика"},
+			{"radio_receiver", "радиоприемник"},
+			{"tea", "чай"},
+			{"gm", "губозакаточная машинка"},
+			{"crossbow", "арбалет"},
+			{"battery", "батарейка"}
 		};
 	}
 }

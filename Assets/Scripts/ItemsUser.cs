@@ -16,7 +16,8 @@ public class ItemsUser : MonoBehaviour
 	{
 		none = 0,
 		hit = 1,
-		throwProjectile = 2
+		throwProjectile = 2,
+		art = 3
 	}
 	
 	public static class UsingMethods
@@ -45,6 +46,11 @@ public class ItemsUser : MonoBehaviour
 		{
 			player.ui.worldItemManager.throwProjectile(item, item.stringData[0], player.usingItemObject.transform.position, player.ui.worldItemManager.getMouseWorldPosition());
 		}
+
+		static public void art()
+		{
+			player.ui.showArt();
+		}
 	}
 	
 	public void useItem(Item item)
@@ -58,6 +64,9 @@ public class ItemsUser : MonoBehaviour
 				break;
 			case UseMethod.throwProjectile:
 				UsingMethods.throwProjectile(item);
+				break;
+			case UseMethod.art:
+				UsingMethods.art();
 				break;
 		}
 		if (item.removeAfterUse)
