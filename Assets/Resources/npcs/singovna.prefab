@@ -133,4 +133,16 @@ MonoBehaviour:
   enemy: 0
   health: 0
   dropItems: []
+  stalker: 0
+  shooting: 0
+  speed: 0
+  shootDelay: 0
+  projectileName: 
+  projectileSpeed: 0
+  damage: 0
+  hitDistance: 0
+  prefabName: singovna
+  rb: {fileID: 0}
+  damageType: 0
+  hypnosed: 0
   tradesList: []

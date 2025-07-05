@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 public class NPC : MonoBehaviour
 {
     private Player player;
-    
+
     private bool touching = false;
     [SerializeField] public string npcName;
     private bool tipShowed = false;
@@ -20,6 +20,27 @@ public class NPC : MonoBehaviour
     [SerializeField] public float health;
 
     [SerializeField] private List<dropItem> dropItems;
+
+    [SerializeField] private bool stalker;
+    [SerializeField] private bool shooting;
+    [SerializeField] private float speed;
+
+    [SerializeField] private float shootDelay;
+
+    [SerializeField] private string projectileName;
+    [SerializeField] private float projectileSpeed;
+    [SerializeField] private int damage;
+    [SerializeField] private float hitDistance;
+    [SerializeField] public string prefabName;
+    private Vector2 targetPos = Vector2.zero;
+
+    [SerializeField] private Rigidbody2D rb;
+
+    [SerializeField] private int damageType;
+
+    public bool hypnosed = false;
+    
+    private float timer = 0;
     
     [System.Serializable]
     private class dropItem
@@ -180,22 +201,132 @@ public class NPC : MonoBehaviour
     
     private void Update()
     {
-        if (touching && player.ui.state == player.ui.CLOSED && !player.ui.commandLine.gameObject.activeInHierarchy)
+        if (!enemy)
         {
-            tipShowed = true;
-            player.ui.showInteractTip(npcName, "F чтобы взаимодействовать", false);
-            if (Input.GetKeyUp(KeyCode.F))
+            if (touching && player.ui.state == player.ui.CLOSED && !player.ui.commandLine.gameObject.activeInHierarchy)
             {
-                player.ui.openTradeUI(tradesList, this);
+                tipShowed = true;
+                player.ui.showInteractTip(npcName, "F чтобы взаимодействовать", false);
+                if (Input.GetKeyUp(KeyCode.F))
+                {
+                    player.ui.openTradeUI(tradesList, this);
+                }
             }
+            else if (tipShowed)
+            {
+                tipShowed = false;
+                player.ui.hideInteractTip();
+            }   
         }
-        else if (tipShowed)
+        else
         {
-            tipShowed = false;
-            player.ui.hideInteractTip();
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                timer = shootDelay;
+                if (shooting)
+                {
+                    shoot();   
+                }
+                else
+                {
+                    hit();
+                }
+            }
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (enemy)
+        {
+            refreshTargetPos();
+            if (targetPos.x > transform.position.x)
+            {
+                rb.velocity = new Vector3(speed, rb.velocity.y, 0);
+            }
+            else
+            {
+                rb.velocity = new Vector3(-speed, rb.velocity.y, 0);
+            }
+        }
+    }
+
+    private void shoot()
+    {
+        Debug.Log(targetPos.ToString());
+        if (player.transform.position.x > transform.position.x)
+        {
+            player.ui.worldItemManager.throwProjectile(projectileName, projectileSpeed, damage, transform.position + new Vector3(hitDistance + 0.5f, 0, 0), targetPos);   
+        }
+        else
+        {
+            player.ui.worldItemManager.throwProjectile(projectileName, projectileSpeed, damage, transform.position - new Vector3(hitDistance + 0.5f, 0, 0), targetPos);
+        }
+    }
+
+    private void hit()
+    {
+        NPC closestNPC = null;
+        foreach (NPC npc in Loader.islandNPCs)
+        {
+            if (npc.enemy && npc != this)
+            {
+                if (closestNPC)
+                {
+                    closestNPC = npc;
+                }
+                else
+                {
+                    if (Vector2.Distance(transform.position, npc.transform.position) <
+                        Vector2.Distance(transform.position, closestNPC.transform.position))
+                    {
+                        closestNPC = npc;
+                    }
+                }
+            }
+        }
+
+        if (!closestNPC || Vector2.Distance(transform.position, closestNPC.transform.position) <
+            Vector2.Distance(transform.position, player.transform.position))
+        {
+            if (Vector2.Distance(transform.position, player.transform.position) < hitDistance)
+            {
+                player.doDamage(damageType, damage);
+            }
+        } else if (Vector2.Distance(transform.position, closestNPC.transform.position) < 1f)
+        {
+            closestNPC.doDamage(damage);
+        }
+    }
+
+    private void refreshTargetPos()
+    {
+        if (hypnosed)
+        {
+            Vector2 closestPos = Loader.islandNPCs[0].transform.position;
+            if (Loader.islandNPCs.Count == 1)
+            {
+                targetPos = player.transform.position;
+            }
+            foreach (NPC npc in Loader.islandNPCs)
+            {
+                if (npc.enemy && npc != this)
+                {
+                    if (Vector2.Distance(transform.position, npc.transform.position) <
+                        Vector2.Distance(transform.position, closestPos))
+                    {
+                        closestPos = npc.transform.position;
+                    }
+                }
+            }
+        }
+        else
+        {
+            targetPos = player.transform.position;
+        }
+    }
+    
     public bool checkCanTrade(Trade trade)
     {
         Dictionary<string, int> productsAmount = new Dictionary<string, int>();

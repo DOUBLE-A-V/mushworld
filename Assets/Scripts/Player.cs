@@ -126,6 +126,7 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
+        setHealth(5);
         Item.itemsPresets = itemsPresets;
         
         sprite = GetComponent<SpriteRenderer>();
@@ -133,16 +134,13 @@ public class Player : MonoBehaviour
         Inventory.refactorCells(new Vector2(9, 6));
         useInventory.refactorCells(new Vector2(6, 2));
         
-        Inventory.addItem(new Item("apple", new Vector2(5, 3)));
-        Inventory.insertItem(new Item("apple", new Vector2(1, 1)), new Vector2(5, 5));
-        
         updateItemsEffects();
         
         cam = Camera.main.GetComponent<CameraScript>();
         ItemsUser.UsingMethods.player = this;
     }
 
-    public float affectDamage(int type, int amount)
+    public float affectDamage(int type, float amount)
     {
         switch (type)
         {
@@ -161,14 +159,26 @@ public class Player : MonoBehaviour
         }
         return amount;
     }
-    void doDamage(int damageType, int amount)
+    public void doDamage(int damageType, float amount)
     {
-        float finalAmount = affectDamage(damageType, amount);
+        float finalAmount = affectDamage(damageType, -amount);
         changeHealth(finalAmount);
+    }
+
+    void setHealth(float amount)
+    {
+        health = amount;
+        ui.refreshHealthText(health);
     }
     void changeHealth(float amount)
     {
         health += amount;
+        ui.refreshHealthText(health);
+
+        if (health <= 0)
+        {
+            ui.loader.resetProgress();
+        }
     }
 
     private void resetRotation()
@@ -501,9 +511,7 @@ public class Player : MonoBehaviour
 
         if (targetRotation != Vector3.zero)
         {
-            Debug.Log(transform.rotation.eulerAngles);
             transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.rotation.eulerAngles, targetRotation, 0.2f));
-            Debug.Log(transform.rotation.eulerAngles);
             if (360 - Math.Abs(transform.rotation.eulerAngles.z) > 355)
             {
                 targetRotation = Vector3.zero;

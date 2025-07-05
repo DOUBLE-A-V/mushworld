@@ -27,6 +27,8 @@ public class Loader : MonoBehaviour
 	[SerializeField] private List<string> islandTypes;
 	[SerializeField] private List<string> allNPCs;
 
+	[SerializeField] private List<string> allEnemies;
+
 	public GameObject islandObject = null;
 
 	private IslandGenParams currentIslandGenParams = null;
@@ -191,12 +193,25 @@ public class Loader : MonoBehaviour
 			}
 		}
 
+		if (Random.Range(1, 1) == 1)
+		{
+			genEnemy();
+		}
+
 		if (System.IO.File.Exists(workDir + "/prebuilds/" + islandType + ".pbd"))
 		{
 			loadPrebuildData();
 		}
 
 		saveCurrentIsland();
+	}
+
+	private void genEnemy()
+	{
+		string enemyName = allEnemies[Random.Range(0, allEnemies.Count-1)];
+		NPC enemy = Instantiate(Resources.Load<NPC>("npcs/" + enemyName));
+		enemy.transform.position = new Vector3(Random.Range(-8, 8), 8, 0);
+		islandNPCs.Add(enemy);
 	}
 
 	private void genNPC()
@@ -300,6 +315,7 @@ public class Loader : MonoBehaviour
 
 		if (!npcs.ContainsKey(splitData[0]))
 		{
+			Debug.Log(splitData[0]);
 			loadNPCPrefab(splitData[0]);
 		}
 
@@ -378,7 +394,7 @@ public class Loader : MonoBehaviour
 		string data;
 		foreach (NPC npc in islandNPCs)
 		{
-			data = npc.npcName;
+			data = npc.prefabName;
 			foreach (NPC.Trade trade in npc.tradesList)
 			{
 				data += "\n:trade\n";
@@ -580,6 +596,8 @@ public class Loader : MonoBehaviour
 		
 		loadStart();
 		ui.closeMenu();
+		ui.player.health = 5;
+		ui.refreshHealthText(ui.player.health);
 	}
 	
 	void Update()

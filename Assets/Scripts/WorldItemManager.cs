@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
 using InvManager;
@@ -24,7 +25,7 @@ public class WorldItemManager : MonoBehaviour
 
     public void throwProjectile(Item item, string projectile, Vector2 from, Vector2 to)
     {
-        if (!Loader.projectiles.ContainsKey("projectile"))
+        if (!Loader.projectiles.ContainsKey(projectile))
         {
             Loader.loadProjectilePrefab(projectile);
         }
@@ -34,6 +35,20 @@ public class WorldItemManager : MonoBehaviour
         projectileObject.damage = item.floatData[0];
         projectileObject.throwMe(from, to, item.floatData[1]);
     }
+    
+    public void throwProjectile(string projectile, float speed, float damage, Vector2 from, Vector2 to)
+    {
+        if (!Loader.projectiles.ContainsKey(projectile))
+        {
+            Loader.loadProjectilePrefab(projectile);
+        }
+
+        Projectile projectileObject = Instantiate(Loader.projectiles[projectile]);
+
+        projectileObject.damage = damage;
+        projectileObject.throwMe(from, to, speed);
+    }
+    
     public WorldItem createItem(Vector2 worldPosition, string itemName, Vector2? size = null, List<Item.EffectPreset> effects = null, bool eatable = false, bool usable = false, ItemsUser.UseMethod useMethod = 0, bool removeAfterUse = false, bool trackMouse = false)
     {
         Item item = new Item(itemName, size, effects, eatable, usable, useMethod, removeAfterUse, trackMouse);

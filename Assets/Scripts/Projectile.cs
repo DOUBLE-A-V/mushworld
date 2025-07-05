@@ -21,11 +21,11 @@ public class Projectile : MonoBehaviour
         to = toPos;
         throwed = true;
         
-        Vector2 direction = UnityEngine.Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f)) - transform.position;
+        Vector2 direction = (new Vector3(toPos.x, toPos.y) - transform.position).normalized;
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
     }
 
-    void onCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "npc")
         {
@@ -34,6 +34,10 @@ public class Projectile : MonoBehaviour
             {
                 npc.doDamage(damage);
             }
+        } else if (collision.gameObject.tag == "player")
+        {
+            Player player = collision.gameObject.GetComponent<Player>();
+            player.doDamage(0, damage);
         }
 
         Destroy(gameObject);

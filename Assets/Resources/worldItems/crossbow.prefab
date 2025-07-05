@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc04147af5e15f46a969046bf6f89df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSize: {x: 1, y: 1}
+  defaultSize: {x: 2, y: 1}
   id: 0
   itemName: 
   touching: 0

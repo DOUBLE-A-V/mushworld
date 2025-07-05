@@ -29,6 +29,8 @@ public class UI : MonoBehaviour
 	[SerializeField] public TMP_InputField commandLine;
 	[SerializeField] private GameObject menu;
 
+	[SerializeField] private TMP_Text healthText;
+
 	[SerializeField] private GameObject art;
 	
 	
@@ -67,6 +69,11 @@ public class UI : MonoBehaviour
 	
 	private List<string> commandsHistory = new List<string>();
 	private int commandsHistoryIndex = 0;
+
+	public void refreshHealthText(float health)
+	{
+		healthText.text = health.ToString() + " hp";
+	}
 	
 	public void openTradeUI(List<NPC.Trade> trades, NPC fromNPC)
 	{
@@ -546,6 +553,9 @@ public class UI : MonoBehaviour
 			case "setIsland":
 				Destroy(loader.islandObject);
 				loader.islandObject = Instantiate(Resources.Load("islands/" + cmdSep[1]) as GameObject);
+				break;
+			case "spawnNPC":
+				loader.createNPC(cmdSep[1], true).transform.position = player.transform.position;
 				break;
 		}
 	}
